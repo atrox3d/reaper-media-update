@@ -1,7 +1,8 @@
 #!/bin/bash
 
-PUSH=false
-AUTOCOMMIT=false
+#
+# NOTE: execute script from parent dir ..
+#
 
 function syntax()
 {
@@ -12,6 +13,9 @@ function syntax()
 	echo "SYNTAX | -a autocommit AND push"
 }
 
+
+PUSH=false
+AUTOCOMMIT=false
 
 if [ $# -gt 0 ]
 then
@@ -50,6 +54,7 @@ dirs=(
 	spoonman spoonman-moises 
 	killing-in-the-name-of-moises
 )
+
 for d in ${dirs[@]}
 do
 	echo "INFO | pulling $d..."
