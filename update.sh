@@ -4,19 +4,24 @@
 # NOTE: execute script from parent dir ..
 #
 
+#
+# prints script syntax
+#
 function syntax()
 {
-	# echo "ERROR  | missing/wrong param"
 	echo "SYNTAX | $0 [ -p -c -a ]"
 	echo "SYNTAX | -p push"
 	echo "SYNTAX | -c autocommit"
 	echo "SYNTAX | -a autocommit AND push"
 }
-
-
+# 
+# set defaults
+# 
 PUSH=false
 AUTOCOMMIT=false
-
+# 
+# parse options
+# 
 OPTIND=1
 while getopts ":pcah" option
 do
@@ -35,6 +40,9 @@ do
 			PUSH=true
 			echo "INFO   | PUSH enabled"
 		;;
+		#
+		# start fallthrough for invalid/missing options and help
+		#
 		\?)
 			echo "ERROR  | invalid option -$OPTARG"
 		;;&
@@ -45,7 +53,6 @@ do
 			echo "INFO   | HELP"
 		;;&
 		*)
-			# echo 'star *, ' "option -$option OPTARG $OPTARG"
 			syntax
 			exit
 		;;
@@ -57,7 +64,9 @@ then
 	exit
 fi 
 shift "$((OPTIND-1))"
-
+#
+# read input dirs from file into array
+#
 HERE="$(dirname ${BASH_SOURCE[0]})"
 DIRFILE="${HERE}/dirs.txt"
 echo "INFO   | reading from ${DIRFILE}..."
@@ -67,12 +76,19 @@ for d in "${dirs[@]}"
 do
 	echo "INFO   | ${d}"
 done
-
+#
+# MAIN LOOP
+#
 for d in ${dirs[@]}
 do
+	#
+	# PULL
+	#
 	echo "INFO   | "${d^^}" | pulling $d..."
 	(cd $d; git pull)
-
+	#
+	# AUTOCOMMIT
+	#
 	if $AUTOCOMMIT
 	then
 		echo "INFO   | "${d^^}" | AUTOCOMMIT ENABLED | auto committing ..."
@@ -82,7 +98,9 @@ do
 			git commit -am "autoupdate"
 		)
 	fi
-
+	#
+	# PUSH
+	#
 	if $PUSH 
 	then
 		echo "INFO   | "${d^^}" | PUSH ENABLED | pushing ..."
