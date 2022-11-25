@@ -1,0 +1,5 @@
+	black-hole-sun black-hole-sun-moises
+	man-in-the-box man-in-the-box-moises
+	cochise cochise-moises 
+	spoonman spoonman-moises 
+	killing-in-the-name-of-moises
