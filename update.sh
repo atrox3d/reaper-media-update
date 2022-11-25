@@ -42,7 +42,7 @@ do
 			echo "ERROR  | missing option arg, flag -$OPTARG"
 		;;&
 		h)
-			echo HELP
+			echo "INFO   | HELP"
 		;;&
 		*)
 			# echo 'star *, ' "option -$option OPTARG $OPTARG"
