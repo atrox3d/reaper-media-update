@@ -69,12 +69,12 @@ dirs=(
 
 for d in ${dirs[@]}
 do
-	echo "INFO | pulling $d..."
+	echo "INFO   | pulling $d..."
 	(cd $d; git pull)
 
 	if $AUTOCOMMIT
 	then
-		echo "INFO | auto committing $d..."
+		echo "INFO   | auto committing $d..."
 		(
 			cd $d
 			git add .
@@ -84,7 +84,7 @@ do
 
 	if $PUSH 
 	then
-		echo "INFO | pushing $d..."
+		echo "INFO   | pushing $d..."
 		(cd $d; git push)
 	fi
 done
