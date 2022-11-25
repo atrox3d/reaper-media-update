@@ -58,14 +58,15 @@ then
 fi 
 shift "$((OPTIND-1))"
 
-
-dirs=(
-	black-hole-sun black-hole-sun-moises
-	man-in-the-box man-in-the-box-moises
-	cochise cochise-moises 
-	spoonman spoonman-moises 
-	killing-in-the-name-of-moises
-)
+HERE="$(dirname ${BASH_SOURCE[0]})"
+DIRFILE="${HERE}/dirs.txt"
+echo "INFO   | reading from ${DIRFILE}..."
+dirs=($(cat "${DIRFILE}"))
+echo "INFO   | found ${#dirs[@]} dirs:"
+for d in "${dirs[@]}"
+do
+	echo "INFO   | ${d}"
+done
 
 for d in ${dirs[@]}
 do
