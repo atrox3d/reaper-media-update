@@ -70,12 +70,12 @@ done
 
 for d in ${dirs[@]}
 do
-	echo "INFO   | pulling $d..."
+	echo "INFO   | "${d^^}" | pulling $d..."
 	(cd $d; git pull)
 
 	if $AUTOCOMMIT
 	then
-		echo "INFO   | auto committing $d..."
+		echo "INFO   | "${d^^}" | AUTOCOMMIT ENABLED | auto committing ..."
 		(
 			cd $d
 			git add .
@@ -85,7 +85,7 @@ do
 
 	if $PUSH 
 	then
-		echo "INFO   | pushing $d..."
+		echo "INFO   | "${d^^}" | PUSH ENABLED | pushing ..."
 		(cd $d; git push)
 	fi
 done
