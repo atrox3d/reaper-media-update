@@ -23,17 +23,17 @@ do
 	case $option in
 		p)
 			PUSH=true
-			echo INFO   | PUSH enabled
+			echo "INFO   | PUSH enabled"
 		;;
 		c)
 			AUTOCOMMIT=true
-			echo INFO   | AUTOCOMMIT enabled
+			echo "INFO   | AUTOCOMMIT enabled"
 		;;
 		a)
 			AUTOCOMMIT=true
-			echo INFO   | AUTOCOMMIT enabled
+			echo "INFO   | AUTOCOMMIT enabled"
 			PUSH=true
-			echo INFO   | PUSH enabled
+			echo "INFO   | PUSH enabled"
 		;;
 		\?)
 			echo "ERROR  | invalid option -$OPTARG"
