@@ -6,7 +6,7 @@
 
 function syntax()
 {
-	echo "ERROR  | missing/wrong param"
+	# echo "ERROR  | missing/wrong param"
 	echo "SYNTAX | $0 [ -p -c -a ]"
 	echo "SYNTAX | -p push"
 	echo "SYNTAX | -c autocommit"
@@ -17,34 +17,46 @@ function syntax()
 PUSH=false
 AUTOCOMMIT=false
 
-if [ $# -gt 0 ]
-then
-	case "${1,,}" in
-		"-p")
+OPTIND=1
+while getopts ":pcah" option
+do
+	case $option in
+		p)
 			PUSH=true
-			echo PUSH=true
+			echo PUSH enabled
 		;;
-		"-c")
+		c)
 			AUTOCOMMIT=true
-			echo AUTOCOMMIT=true
+			echo AUTOCOMMIT enabled
 		;;
-		"-a")
+		a)
 			AUTOCOMMIT=true
-			echo AUTOCOMMIT=true
+			echo AUTOCOMMIT enabled
 			PUSH=true
-			echo PUSH=true
+			echo PUSH enabled
 		;;
-		"-h")
-		;&
+		\?)
+			echo "ERROR  | invalid option -$OPTARG"
+		;;&
+		:)
+			echo "ERROR  | missing option arg, flag -$OPTARG"
+		;;&
+		h)
+			echo HELP
+		;;&
 		*)
+			# echo 'star *, ' "option -$option OPTARG $OPTARG"
 			syntax
 			exit
 		;;
 	esac
-else
+done
+if [ $OPTIND -eq 1 ]
+then
 	syntax
 	exit
-fi
+fi 
+shift "$((OPTIND-1))"
 
 
 dirs=(
