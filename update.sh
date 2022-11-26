@@ -10,6 +10,7 @@
 function syntax()
 {
 	echo "SYNTAX | $0 [ -p -c -a ]"
+	echo "SYNTAX | -l list dirs and exits"
 	echo "SYNTAX | -p push"
 	echo "SYNTAX | -c autocommit"
 	echo "SYNTAX | -a autocommit AND push"
@@ -19,13 +20,17 @@ function syntax()
 # 
 PUSH=false
 AUTOCOMMIT=false
+LISTDIRS=false
 # 
 # parse options
 # 
 OPTIND=1
-while getopts ":pcah" option
+while getopts ":lpcah" option
 do
 	case $option in
+		l)
+			LISTDIRS=true
+		;;
 		p)
 			PUSH=true
 			echo "INFO   | PUSH enabled"
@@ -58,6 +63,9 @@ do
 		;;
 	esac
 done
+#
+# no options passed
+#
 if [ $OPTIND -eq 1 ]
 then
 	syntax
@@ -76,6 +84,10 @@ for d in "${dirs[@]}"
 do
 	echo "INFO   | ${d}"
 done
+if $LISTDIRS
+then
+	exit
+fi
 #
 # MAIN LOOP
 #
