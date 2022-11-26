@@ -14,6 +14,7 @@ function syntax()
 	echo "SYNTAX | -p push"
 	echo "SYNTAX | -c autocommit"
 	echo "SYNTAX | -a autocommit AND push"
+	echo "SYNTAX | -u pull (default)"
 }
 # 
 # set defaults
@@ -23,6 +24,8 @@ PUSH=false
 AUTOCOMMIT=false
 LISTDIRS=false
 NO_OPTIONS=false
+HERE="$(dirname ${BASH_SOURCE[0]})"
+DIRFILE="${HERE}/dirs.txt"
 # 
 # parse options
 # 
@@ -79,8 +82,6 @@ shift "$((OPTIND-1))"
 #
 # read input dirs from file into array
 #
-HERE="$(dirname ${BASH_SOURCE[0]})"
-DIRFILE="${HERE}/dirs.txt"
 echo "INFO   | reading from ${DIRFILE}..."
 dirs=($(cat "${DIRFILE}"))
 echo "INFO   | found ${#dirs[@]} dirs:"
