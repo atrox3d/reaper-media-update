@@ -17,17 +17,22 @@ function syntax()
 }
 # 
 # set defaults
-# 
+#
+PULL=false
 PUSH=false
 AUTOCOMMIT=false
 LISTDIRS=false
+NO_OPTIONS=false
 # 
 # parse options
 # 
 OPTIND=1
-while getopts ":lpcah" option
+while getopts ":lpcahu" option
 do
 	case $option in
+		u)
+			PULL=true
+		;;
 		l)
 			LISTDIRS=true
 		;;
@@ -68,8 +73,7 @@ done
 #
 if [ $OPTIND -eq 1 ]
 then
-	syntax
-	exit
+	NO_OPTIONS=true
 fi 
 shift "$((OPTIND-1))"
 #
@@ -91,13 +95,21 @@ fi
 #
 # MAIN LOOP
 #
+if $NO_OPTIONS
+then
+	echo 'INFO   | no options detected, PULL ENABLED'
+	PULL=true
+fi
 for d in ${dirs[@]}
 do
 	#
 	# PULL
 	#
-	echo "INFO   | "${d^^}" | PULL..."
-	(cd $d; git pull)
+	if $PULL
+	then
+		echo "INFO   | "${d^^}" | PULL..."
+		(cd $d; git pull)
+	fi
 	#
 	# AUTOCOMMIT
 	#
