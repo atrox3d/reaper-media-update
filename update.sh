@@ -34,7 +34,7 @@ function git_autoupdate()
 function list_dirs()
 {
 	echo "INFO   | reading from ${DIRFILE}..."
-	dirs=($(cat "${DIRFILE}"))
+	dirs=($(cat "${DIRFILE}" | sort))
 	echo "INFO   | found ${#dirs[@]} dirs:"
 	for d in "${dirs[@]}"
 	do
