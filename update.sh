@@ -15,6 +15,18 @@ function syntax()
 	echo "SYNTAX | -c autocommit"
 	echo "SYNTAX | -x autocommit AND push"
 	echo "SYNTAX | -u pull (default)"
+	echo "SYNTAX | -n no autoupdate script"
+}
+
+function git_autoupdate()
+{
+	local here="$(dirname ${BASH_SOURCE[0]})"
+	(
+		echo "INFO   | GIT AUTOUPDATE SCRIPT | cd ${here}..."
+		cd "${here}"
+		echo "INFO   | GIT AUTOUPDATE SCRIPT | git pull..."
+		git pull
+	)
 }
 # 
 # set defaults
@@ -24,13 +36,14 @@ PUSH=false
 AUTOCOMMIT=false
 LISTDIRS=false
 NO_OPTIONS=false
+GIT_AUTOUPDATE=true
 HERE="$(dirname ${BASH_SOURCE[0]})"
 DIRFILE="${HERE}/dirs.txt"
 # 
 # parse options
 # 
 OPTIND=1
-while getopts ":lpcxhu" option
+while getopts ":lpcxhun" option
 do
 	case $option in
 		u)
@@ -52,6 +65,10 @@ do
 			echo "INFO   | AUTOCOMMIT enabled"
 			PUSH=true
 			echo "INFO   | PUSH enabled"
+		;;
+		n)
+			echo "INFO   | GIT AUTOUPDATE disabled"
+			GIT_AUTOUPDATE=false
 		;;
 		#
 		# start fallthrough for invalid/missing options and help
@@ -79,6 +96,13 @@ then
 	NO_OPTIONS=true
 fi 
 shift "$((OPTIND-1))"
+#
+# always use last version
+#
+if $GIT_AUTOUPDATE
+then
+	git_autoupdate
+fi
 #
 # read input dirs from file into array
 #
