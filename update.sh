@@ -13,7 +13,7 @@ function syntax()
 	echo "SYNTAX | -l list dirs and exits"
 	echo "SYNTAX | -p push"
 	echo "SYNTAX | -c autocommit"
-	echo "SYNTAX | -a autocommit AND push"
+	echo "SYNTAX | -x autocommit AND push"
 	echo "SYNTAX | -u pull (default)"
 }
 # 
@@ -30,7 +30,7 @@ DIRFILE="${HERE}/dirs.txt"
 # parse options
 # 
 OPTIND=1
-while getopts ":lpcahu" option
+while getopts ":lpcxhu" option
 do
 	case $option in
 		u)
@@ -47,7 +47,7 @@ do
 			AUTOCOMMIT=true
 			echo "INFO   | AUTOCOMMIT enabled"
 		;;
-		a)
+		x)
 			AUTOCOMMIT=true
 			echo "INFO   | AUTOCOMMIT enabled"
 			PUSH=true
