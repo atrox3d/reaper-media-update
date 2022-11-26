@@ -84,14 +84,14 @@ do
 	#
 	# PULL
 	#
-	echo "INFO   | "${d^^}" | pulling $d..."
+	echo "INFO   | "${d^^}" | PULL..."
 	(cd $d; git pull)
 	#
 	# AUTOCOMMIT
 	#
 	if $AUTOCOMMIT
 	then
-		echo "INFO   | "${d^^}" | AUTOCOMMIT ENABLED | auto committing ..."
+		echo "INFO   | "${d^^}" | AUTOCOMMIT..."
 		(
 			cd $d
 			git add .
@@ -103,7 +103,7 @@ do
 	#
 	if $PUSH 
 	then
-		echo "INFO   | "${d^^}" | PUSH ENABLED | pushing ..."
+		echo "INFO   | "${d^^}" | PUSH..."
 		(cd $d; git push)
 	fi
 done
