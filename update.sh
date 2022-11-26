@@ -48,7 +48,7 @@ function list_dirs()
 # 
 # set defaults
 #
-PULL=false
+PULL=true
 PUSH=false
 AUTOCOMMIT=false
 LISTDIRS=false
