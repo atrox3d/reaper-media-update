@@ -28,6 +28,23 @@ function git_autoupdate()
 		git pull
 	)
 }
+#
+# read input dirs from file into array
+#
+function list_dirs()
+{
+	echo "INFO   | reading from ${DIRFILE}..."
+	dirs=($(cat "${DIRFILE}"))
+	echo "INFO   | found ${#dirs[@]} dirs:"
+	for d in "${dirs[@]}"
+	do
+		echo "INFO   | ${d}"
+	done
+	if $LISTDIRS
+	then
+		exit
+	fi
+}
 # 
 # set defaults
 #
@@ -104,19 +121,9 @@ then
 	git_autoupdate
 fi
 #
-# read input dirs from file into array
+# list working dirs
 #
-echo "INFO   | reading from ${DIRFILE}..."
-dirs=($(cat "${DIRFILE}"))
-echo "INFO   | found ${#dirs[@]} dirs:"
-for d in "${dirs[@]}"
-do
-	echo "INFO   | ${d}"
-done
-if $LISTDIRS
-then
-	exit
-fi
+list_dirs
 #
 # MAIN LOOP
 #
