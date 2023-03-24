@@ -57,7 +57,7 @@ do
 	#
 	if [ ! -d "${d}" ]
 	then
-		echo "FATAL | ${d} | does not exist"
+		fatal "${d} | does not exist"
 		exit 1
 	fi
 	#
@@ -65,7 +65,7 @@ do
 	#
 	if [ ! -d "${d}/.git/" ]
 	then
-		echo "WARNING | ${d} | not a git repo"
+		warn "${d} | not a git repo"
 		continue
 	fi
 	#
@@ -73,7 +73,7 @@ do
 	#
 	if $PULL
 	then
-		echo "INFO   | "${d^^}" | PULL..."
+		info "${d^^} | PULL..."
 		(cd $d; git pull)
 	fi
 	#
@@ -81,7 +81,7 @@ do
 	#
 	if $AUTOCOMMIT
 	then
-		echo "INFO   | "${d^^}" | AUTOCOMMIT..."
+		info "${d^^} | AUTOCOMMIT..."
 		(
 			cd $d
 			git add .
@@ -93,7 +93,7 @@ do
 	#
 	if $PUSH 
 	then
-		echo "INFO   | "${d^^}" | PUSH..."
+		info "${d^^} | PUSH..."
 		(cd $d; git push)
 	fi
 done

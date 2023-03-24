@@ -1,6 +1,7 @@
 #!/bin/bash
 
 INCLUDE_FILES=(
+	logger.include
 	syntax.include
 	git_autoupdate.include
 	list_dirs.include
