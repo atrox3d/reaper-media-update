@@ -1,0 +1,23 @@
+#!/bin/bash
+
+VARS=(
+    PULL
+    PUSH
+    AUTOCOMMIT
+    PROJECT_DIRS
+    JUST_LISTDIRS
+    NO_OPTIONS
+    GIT_AUTOUPDATE
+    DEFAULT_DIRFILE
+    DIRFILE
+    AUTODISCOVER_CONFIG
+    AUTODISCOVER
+)
+
+function dump_vars()
+{
+    for v in "${VARS[@]}"
+    do
+        echo "INFO  | var | $v=${!v}"
+    done
+}

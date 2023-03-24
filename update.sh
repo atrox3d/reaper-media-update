@@ -9,6 +9,7 @@ HERE="$(dirname ${BASH_SOURCE[0]})"
 . "${HERE}/list_dirs.include"
 . "${HERE}/autodiscover.include"
 . "${HERE}/parse-options.include"
+. "${HERE}/dump_vars.include"
 # 
 # set defaults
 #
@@ -19,7 +20,8 @@ PROJECT_DIRS=()
 JUST_LISTDIRS=false
 NO_OPTIONS=false
 GIT_AUTOUPDATE=true
-DIRFILE="${HERE}/dirs.txt"
+DEFAULT_DIRFILE="${HERE}/dirs.txt"
+DIRFILE=
 AUTODISCOVER_CONFIG="${HERE}/autodiscover.config"
 AUTODISCOVER=true
 
@@ -28,18 +30,6 @@ parse_options "${@}"
 # default
 #
 $NO_OPTIONS && { echo 'INFO   | no options detected, PULL ENABLED';PULL=true; }
-VARS=(
-PULL
-PUSH
-AUTOCOMMIT
-PROJECT_DIRS
-JUST_LISTDIRS
-NO_OPTIONS
-GIT_AUTOUPDATE
-DIRFILE
-AUTODISCOVER_CONFIG
-AUTODISCOVER
-)
 #
 # always use last version
 #
@@ -48,12 +38,16 @@ $GIT_AUTOUPDATE && git_autoupdate
 # list working dihprints this help and exits
 # list working PROJECT_DIRS
 #
-$JUST_LISTDIRS && AUTODISCOVER=false
-$AUTODISCOVER && autodiscover || list_dirs
-for v in "${VARS[@]}"
-do
-	echo "INFO  | var | $v=${!v}"
-done
+if [ ${DIRFILE:-UNDEFINED} == UNDEFINED ]
+then
+	DIRFILE="${DEFAULT_DIRFILE}"
+else
+	AUTODISCOVER=false
+fi
+${JUST_LISTDIRS} && AUTODISCOVER=false
+${AUTODISCOVER} && autodiscover || list_dirs
+
+dump_vars
 exit
 #
 # MAIN LOOP
