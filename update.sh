@@ -8,6 +8,7 @@ HERE="$(dirname ${BASH_SOURCE[0]})"
 . "${HERE}/git_autoupdate.include"
 . "${HERE}/list_dirs.include"
 . "${HERE}/autodiscover.include"
+. "${HERE}/parse-options.include"
 # 
 # set defaults
 #
@@ -18,97 +19,26 @@ PROJECT_DIRS=()
 JUST_LISTDIRS=false
 NO_OPTIONS=false
 GIT_AUTOUPDATE=true
-DIRFILE="${HERE}/PROJECT_DIRS.txt"
+DIRFILE="${HERE}/dirs.txt"
 AUTODISCOVER_CONFIG="${HERE}/autodiscover.config"
-# 
-# parse options
-# 
-OPTIND=1
-while getopts ":lpcxhunf:" option
-do
-	case $option in
-		u)
-			PULL=true
-			echo "INFO   | PULL enabled"
-		;;
-		l)
-			JUST_LISTDIRS=true
-			echo "INFO   | JUST_LISTDIRS enabled"
-		;;
-		p)
-			PUSH=true
-			echo "INFO   | PUSH enabled"
-		;;
-		c)
-			AUTOCOMMIT=true
-			echo "INFO   | AUTOCOMMIT enabled"
-		;;
-		x)
-			AUTOCOMMIT=true
-			echo "INFO   | AUTOCOMMIT enabled"
-			PUSH=true
-			echo "INFO   | PUSH enabled"
-		;;
-		n)
-			echo "INFO   | GIT AUTOUPDATE disabled"
-			GIT_AUTOUPDATE=false
-		;;
-		f)
-			DIRFILE="${HERE}/${OPTARG}"
-			echo "INFO   | DIRFILE=${DIRFILE}"
-			[ -f "${DIRFILE}" ] || {
-				echo "FATAL  | ${DIRFILE} does not exists"
-				ls -l
-				exit 1
-			}
-		;;
-		#
-		# start fallthrough for invalid/missing options and help
-		#
-		\?)
-			echo "ERROR  | invalid option -$OPTARG"
-		;;&
-		:)
-			echo "ERROR  | missing option arg, flag -$OPTARG"
-		;;&
-		h)
-			echo "INFO   | HELP"
-		;;&
-		*)
-			syntax
-			exit
-		;;
-	esac
-done
-#
-# no options passed
-#
-if [ $OPTIND -eq 1 ]
-then
-	NO_OPTIONS=true
-fi 
-shift "$((OPTIND-1))"
+AUTODISCOVER=true
+
+parse_options "${@}"
+# exit
 #
 # always use last version
 #
-if $GIT_AUTOUPDATE
-then
-	git_autoupdate
-fi
+$GIT_AUTOUPDATE && git_autoupdate
 #
 # list working dihprints this help and exits
 # list working PROJECT_DIRS
 #
-# list_dirs
-autodiscover
+$JUST_LISTDIRS && AUTODISCOVER=false
+$AUTODISCOVER && autodiscover || list_dirs
 #
 # default
 #
-if $NO_OPTIONS
-then
-	echo 'INFO   | no options detected, PULL ENABLED'
-	PULL=true
-fi
+$NO_OPTIONS && {echo 'INFO   | no options detected, PULL ENABLED';PULL=true;}
 #
 # MAIN LOOP
 #

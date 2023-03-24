@@ -37,6 +37,7 @@ function autodiscover()
 
 if [ "$0" == "${BASH_SOURCE}" ]
 then
+	echo "MAIN"
 	AUTODISCOVER_CONFIG=autodiscover.config
 	PROJECT_DIRS=()
 	autodiscover

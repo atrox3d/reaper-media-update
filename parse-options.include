@@ -1,0 +1,78 @@
+#!/bin/bash
+
+ function parse_options()
+ {
+    # 
+    # parse options
+    # 
+    # echo "params $@"
+    OPTIND=1
+    while getopts ":alpcxhunf:" option
+    do
+        case $option in
+            a)
+                AUTODISCOVER=true
+                echo "INFO   | AUTODISCOVER enabled"
+            ;;
+            u)
+                PULL=true
+                echo "INFO   | PULL enabled"
+            ;;
+            l)
+                JUST_LISTDIRS=true
+                echo "INFO   | JUST_LISTDIRS enabled"
+            ;;
+            p)
+                PUSH=true
+                echo "INFO   | PUSH enabled"
+            ;;
+            c)
+                AUTOCOMMIT=true
+                echo "INFO   | AUTOCOMMIT enabled"
+            ;;
+            x)
+                AUTOCOMMIT=true
+                echo "INFO   | AUTOCOMMIT enabled"
+                PUSH=true
+                echo "INFO   | PUSH enabled"
+            ;;
+            n)
+                echo "INFO   | GIT AUTOUPDATE disabled"
+                GIT_AUTOUPDATE=false
+            ;;
+            f)
+                DIRFILE="${HERE}/${OPTARG}"
+                echo "INFO   | DIRFILE=${DIRFILE}"
+                [ -f "${DIRFILE}" ] || {
+                    echo "FATAL  | ${DIRFILE} does not exists"
+                    ls -l
+                    exit 1
+                }
+            ;;
+            #
+            # start fallthrough for invalid/missing options and help
+            #
+            \?)
+                echo "ERROR  | invalid option -$OPTARG"
+            ;;&
+            :)
+                echo "ERROR  | missing option arg, flag -$OPTARG"
+            ;;&
+            h)
+                echo "INFO   | HELP"
+            ;;&
+            *)
+                syntax
+                exit
+            ;;
+        esac
+    done
+    #
+    # no options passed
+    #
+    if [ $OPTIND -eq 1 ]
+    then
+        NO_OPTIONS=true
+    fi 
+    shift "$((OPTIND-1))"
+}
