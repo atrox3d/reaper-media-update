@@ -11,7 +11,7 @@ function syntax()
 {
 	echo "SYNTAX | $0 [ -hlpcxun -f {dir-file} ]"
 	echo "SYNTAX | -h prints this help and exits"
-	echo "SYNTAX | -l list dirs and exits"
+	echo "SYNTAX | -l list PROJECT_DIRS and exits"
 	echo "SYNTAX | -p push"
 	echo "SYNTAX | -c autocommit"
 	echo "SYNTAX | -x autocommit AND push"
@@ -33,15 +33,15 @@ function git_autoupdate()
 	)
 }
 #
-# read input dirs from file into array
+# read input PROJECT_DIRS from file into array
 #
 function list_dirs()
 {
 	echo "INFO   | reading from ${DIRFILE}..."
-	dirs=($(cat "${DIRFILE}" | sort))
-	echo "INFO   | found ${#dirs[@]} dirs:"
+	PROJECT_DIRS=($(cat "${DIRFILE}" | sort))
+	echo "INFO   | found ${#PROJECT_DIRS[@]} PROJECT_DIRS:"
 
-	for d in "${dirs[@]}"
+	for d in "${PROJECT_DIRS[@]}"
 	do
 		echo "INFO   | ${d}"
 	done
@@ -67,8 +67,16 @@ function autodiscover()
 
 	for root in "${roots[@]}"
 	do
-		echo "INFO   | ${root}"
+		echo "INFO   | root | ${root}"
+		dirs=( ${root}/* )
+		echo "INFO   | dirs[@] | ${dirs[@]}"
+		echo "INFO   | dirs | ${dirs}"
+		# for dir in "${root}"/*
+		# do
+		# 	PROJECT_DIRS+=("${dir}")
+		# done
 	done
+	echo "${PROJECT_DIRS[@]}"
 	exit
 }
 # 
@@ -77,11 +85,12 @@ function autodiscover()
 PULL=true
 PUSH=false
 AUTOCOMMIT=false
+PROJECT_DIRS=()
 JUST_LISTDIRS=false
 NO_OPTIONS=false
 GIT_AUTOUPDATE=true
 HERE="$(dirname ${BASH_SOURCE[0]})"
-DIRFILE="${HERE}/dirs.txt"
+DIRFILE="${HERE}/PROJECT_DIRS.txt"
 AUTODISCOVER_CONFIG="${HERE}/.autodiscover.config"
 # 
 # parse options
@@ -160,7 +169,7 @@ then
 fi
 #
 # list working dihprints this help and exits
-# list working dirs
+# list working PROJECT_DIRS
 #
 # list_dirs
 autodiscover
@@ -175,7 +184,7 @@ fi
 #
 # MAIN LOOP
 #
-for d in ${dirs[@]}
+for d in ${PROJECT_DIRS[@]}
 do
 	#
 	# PULL
