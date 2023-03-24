@@ -51,6 +51,26 @@ function list_dirs()
 		exit
 	fi
 }
+#
+# autodiscover
+#
+function autodiscover()
+{
+	# check if autodiscover config exists
+	[ -f ${AUTODISCOVER_CONFIG} ] || {
+		echo "FATAL   | ${AUTODISCOVER_CONFIG} does not exist"
+		exit 1
+	}
+	# get list of roots in array
+	roots=($(cat "${AUTODISCOVER_CONFIG}" | sort))
+	echo "INFO   | found ${#roots[@]} roots:"
+
+	for root in "${roots[@]}"
+	do
+		echo "INFO   | ${root}"
+	done
+	exit
+}
 # 
 # set defaults
 #
@@ -62,6 +82,7 @@ NO_OPTIONS=false
 GIT_AUTOUPDATE=true
 HERE="$(dirname ${BASH_SOURCE[0]})"
 DIRFILE="${HERE}/dirs.txt"
+AUTODISCOVER_CONFIG="${HERE}/.autodiscover.config"
 # 
 # parse options
 # 
@@ -141,7 +162,8 @@ fi
 # list working dihprints this help and exits
 # list working dirs
 #
-list_dirs
+# list_dirs
+autodiscover
 #
 # default
 #
