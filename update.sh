@@ -54,6 +54,12 @@ dump_vars
 #
 for d in ${PROJECT_DIRS[@]}
 do
+	if [ ! -d "${d}" ]
+	then
+		echo "FATAL | ${d} | does not exist"
+		exit 1
+	fi
+
 	if [ ! -d "${d}/.git/" ]
 	then
 		echo "WARNING | ${d} | not a git repo"
