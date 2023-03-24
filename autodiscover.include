@@ -11,20 +11,33 @@ function autodiscover()
 		exit 1
 	}
 	# get list of roots in array
+	#PROJECT_DIRS=($(cat "${DIRFILE}" | sort))
 	roots=($(cat "${AUTODISCOVER_CONFIG}" | sort))
 	echo "INFO   | found ${#roots[@]} roots:"
+	echo "INFO   | roots | ${roots[@]}"
 
 	for root in "${roots[@]}"
 	do
 		echo "INFO   | root | ${root}"
-		dirs=( ${root}/* )
-		echo "INFO   | dirs[@] | ${dirs[@]}"
-		echo "INFO   | dirs | ${dirs}"
-		# for dir in "${root}"/*
-		# do
-		# 	PROJECT_DIRS+=("${dir}")
-		# done
+		dirs=(${root}/*)
+		# echo "INFO   | dirs[@] | ${dirs[@]}"
+		# echo "INFO   | dirs | ${dirs}"
+		for dir in "${root}"/*
+		do
+			PROJECT_DIRS+=("${dir}")
+		done
 	done
-	echo "${PROJECT_DIRS[@]}"
+	# echo "${PROJECT_DIRS[@]}"
+	for pj in "${PROJECT_DIRS[@]}"
+	do
+		echo $pj
+	done
 	exit
 }
+
+if [ "$0" == "${BASH_SOURCE}" ]
+then
+	AUTODISCOVER_CONFIG=autodiscover.config
+	PROJECT_DIRS=()
+	autodiscover
+fi
