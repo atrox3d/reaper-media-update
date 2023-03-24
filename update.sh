@@ -22,7 +22,7 @@ AUTODISCOVER=true
 
 parse_options "${@}"
 #
-# default
+# default: no options
 #
 $NO_OPTIONS && { echo 'INFO   | no options detected, PULL ENABLED';PULL=true; }
 #
@@ -30,8 +30,7 @@ $NO_OPTIONS && { echo 'INFO   | no options detected, PULL ENABLED';PULL=true; }
 #
 $GIT_AUTOUPDATE && git_autoupdate
 #
-# list working dihprints this help and exits
-# list working PROJECT_DIRS
+# set variables
 #
 if [ ${DIRFILE:-UNDEFINED} == UNDEFINED ]
 then
@@ -40,21 +39,30 @@ else
 	AUTODISCOVER=false
 fi
 ${JUST_LISTDIRS} && AUTODISCOVER=false
+#
+# populate array of directories
+#
 ${AUTODISCOVER} && autodiscover || list_dirs
-
+#
+# print all vars
+#
 dump_vars
-# exit
 #
 # MAIN LOOP
 #
 for d in ${PROJECT_DIRS[@]}
 do
+	#
+	# check for dir existence
+	#
 	if [ ! -d "${d}" ]
 	then
 		echo "FATAL | ${d} | does not exist"
 		exit 1
 	fi
-
+	#
+	# check for git repo
+	#
 	if [ ! -d "${d}/.git/" ]
 	then
 		echo "WARNING | ${d} | not a git repo"
