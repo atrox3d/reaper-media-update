@@ -4,13 +4,8 @@
 # NOTE: execute script from parent dir ..
 #
 HERE="$(dirname ${BASH_SOURCE[0]})"
-. "${HERE}/syntax.include"
-. "${HERE}/git_autoupdate.include"
-. "${HERE}/list_dirs.include"
-. "${HERE}/autodiscover.include"
-. "${HERE}/parse-options.include"
-. "${HERE}/dump_vars.include"
-# 
+. "${HERE}/loader.include"
+
 # set defaults
 #
 PULL=true

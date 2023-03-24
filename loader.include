@@ -1,0 +1,19 @@
+#!/bin/bash
+
+INCLUDE_FILES=(
+	syntax.include
+	git_autoupdate.include
+	list_dirs.include
+	autodiscover.include
+	parse-options.include
+	dump_vars.include
+)
+
+for INCLUDE in "${INCLUDE_FILES[@]}"
+do
+	echo "INFO  | sourcing ${HERE}/${INCLUDE}..."
+	. "${HERE}/${INCLUDE}" || {
+		echo "FATAL | cannot source ${HERE}/${INCLUDE}"
+		exit 1
+	}
+done
