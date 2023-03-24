@@ -24,7 +24,22 @@ AUTODISCOVER_CONFIG="${HERE}/autodiscover.config"
 AUTODISCOVER=true
 
 parse_options "${@}"
-# exit
+#
+# default
+#
+$NO_OPTIONS && { echo 'INFO   | no options detected, PULL ENABLED';PULL=true; }
+VARS=(
+PULL
+PUSH
+AUTOCOMMIT
+PROJECT_DIRS
+JUST_LISTDIRS
+NO_OPTIONS
+GIT_AUTOUPDATE
+DIRFILE
+AUTODISCOVER_CONFIG
+AUTODISCOVER
+)
 #
 # always use last version
 #
@@ -35,10 +50,11 @@ $GIT_AUTOUPDATE && git_autoupdate
 #
 $JUST_LISTDIRS && AUTODISCOVER=false
 $AUTODISCOVER && autodiscover || list_dirs
-#
-# default
-#
-$NO_OPTIONS && {echo 'INFO   | no options detected, PULL ENABLED';PULL=true;}
+for v in "${VARS[@]}"
+do
+	echo "INFO  | var | $v=${!v}"
+done
+exit
 #
 # MAIN LOOP
 #
