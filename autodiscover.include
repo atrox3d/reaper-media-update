@@ -19,19 +19,19 @@ function autodiscover()
 	for root in "${roots[@]}"
 	do
 		echo "INFO   | root | ${root}"
-		dirs=(${root}/*)
+		dirs=("${root}"/*)
 		# echo "INFO   | dirs[@] | ${dirs[@]}"
 		# echo "INFO   | dirs | ${dirs}"
-		for dir in "${root}"/*
+		for dir in "${dirs[@]}"
 		do
 			PROJECT_DIRS+=("${dir}")
 		done
 	done
 	# echo "${PROJECT_DIRS[@]}"
-	for pj in "${PROJECT_DIRS[@]}"
-	do
-		echo $pj
-	done
+	# for pj in "${PROJECT_DIRS[@]}"
+	# do
+	# 	echo $pj
+	# done
 	# exit
 }
 

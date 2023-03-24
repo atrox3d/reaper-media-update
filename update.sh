@@ -48,12 +48,17 @@ ${JUST_LISTDIRS} && AUTODISCOVER=false
 ${AUTODISCOVER} && autodiscover || list_dirs
 
 dump_vars
-exit
+# exit
 #
 # MAIN LOOP
 #
 for d in ${PROJECT_DIRS[@]}
 do
+	if [ ! -d "${d}/.git/" ]
+	then
+		echo "WARNING | ${d} | not a git repo"
+		continue
+	fi
 	#
 	# PULL
 	#
