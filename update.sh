@@ -3,82 +3,12 @@
 #
 # NOTE: execute script from parent dir ..
 #
+HERE="$(dirname ${BASH_SOURCE[0]})"
+. "${HERE}/syntax.include"
+. "${HERE}/git_autoupdate.include"
+. "${HERE}/list_dirs.include"
+. "${HERE}/autodiscover.include"
 
-#
-# prints script syntax
-#
-function syntax()
-{
-	echo "SYNTAX | $0 [ -hlpcxun -f {dir-file} ]"
-	echo "SYNTAX | -h prints this help and exits"
-	echo "SYNTAX | -l list PROJECT_DIRS and exits"
-	echo "SYNTAX | -p push"
-	echo "SYNTAX | -c autocommit"
-	echo "SYNTAX | -x autocommit AND push"
-	echo "SYNTAX | -u pull (default)"
-	echo "SYNTAX | -n no autoupdate script"
-	echo "SYNTAX | -f {dir-file} | use {dir-file as input}"
-}
-#
-# updates this script
-#
-function git_autoupdate()
-{
-	local here="$(dirname ${BASH_SOURCE[0]})"
-	(
-		echo "INFO   | GIT AUTOUPDATE SCRIPT | cd ${here}..."
-		cd "${here}"
-		echo "INFO   | GIT AUTOUPDATE SCRIPT | git pull..."
-		git pull
-	)
-}
-#
-# read input PROJECT_DIRS from file into array
-#
-function list_dirs()
-{
-	echo "INFO   | reading from ${DIRFILE}..."
-	PROJECT_DIRS=($(cat "${DIRFILE}" | sort))
-	echo "INFO   | found ${#PROJECT_DIRS[@]} PROJECT_DIRS:"
-
-	for d in "${PROJECT_DIRS[@]}"
-	do
-		echo "INFO   | ${d}"
-	done
-	
-	if $JUST_LISTDIRS
-	then
-		exit
-	fi
-}
-#
-# autodiscover
-#
-function autodiscover()
-{
-	# check if autodiscover config exists
-	[ -f ${AUTODISCOVER_CONFIG} ] || {
-		echo "FATAL   | ${AUTODISCOVER_CONFIG} does not exist"
-		exit 1
-	}
-	# get list of roots in array
-	roots=($(cat "${AUTODISCOVER_CONFIG}" | sort))
-	echo "INFO   | found ${#roots[@]} roots:"
-
-	for root in "${roots[@]}"
-	do
-		echo "INFO   | root | ${root}"
-		dirs=( ${root}/* )
-		echo "INFO   | dirs[@] | ${dirs[@]}"
-		echo "INFO   | dirs | ${dirs}"
-		# for dir in "${root}"/*
-		# do
-		# 	PROJECT_DIRS+=("${dir}")
-		# done
-	done
-	echo "${PROJECT_DIRS[@]}"
-	exit
-}
 # 
 # set defaults
 #
@@ -89,7 +19,6 @@ PROJECT_DIRS=()
 JUST_LISTDIRS=false
 NO_OPTIONS=false
 GIT_AUTOUPDATE=true
-HERE="$(dirname ${BASH_SOURCE[0]})"
 DIRFILE="${HERE}/PROJECT_DIRS.txt"
 AUTODISCOVER_CONFIG="${HERE}/.autodiscover.config"
 # 

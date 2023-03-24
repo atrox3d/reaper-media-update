@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#
+# read input PROJECT_DIRS from file into array
+#
+function list_dirs()
+{
+	echo "INFO   | reading from ${DIRFILE}..."
+	PROJECT_DIRS=($(cat "${DIRFILE}" | sort))
+	echo "INFO   | found ${#PROJECT_DIRS[@]} PROJECT_DIRS:"
+
+	for d in "${PROJECT_DIRS[@]}"
+	do
+		echo "INFO   | ${d}"
+	done
+	
+	if $JUST_LISTDIRS
+	then
+		exit
+	fi
+}

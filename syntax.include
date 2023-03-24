@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#
+# prints script syntax
+#
+function syntax()
+{
+	echo "SYNTAX | $0 [ -hlpcxun -f {dir-file} ]"
+	echo "SYNTAX | -h prints this help and exits"
+	echo "SYNTAX | -l list PROJECT_DIRS and exits"
+	echo "SYNTAX | -p push"
+	echo "SYNTAX | -c autocommit"
+	echo "SYNTAX | -x autocommit AND push"
+	echo "SYNTAX | -u pull (default)"
+	echo "SYNTAX | -n no autoupdate script"
+	echo "SYNTAX | -f {dir-file} | use {dir-file as input}"
+}

@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#
+# autodiscover
+#
+function autodiscover()
+{
+	# check if autodiscover config exists
+	[ -f ${AUTODISCOVER_CONFIG} ] || {
+		echo "FATAL   | ${AUTODISCOVER_CONFIG} does not exist"
+		exit 1
+	}
+	# get list of roots in array
+	roots=($(cat "${AUTODISCOVER_CONFIG}" | sort))
+	echo "INFO   | found ${#roots[@]} roots:"
+
+	for root in "${roots[@]}"
+	do
+		echo "INFO   | root | ${root}"
+		dirs=( ${root}/* )
+		echo "INFO   | dirs[@] | ${dirs[@]}"
+		echo "INFO   | dirs | ${dirs}"
+		# for dir in "${root}"/*
+		# do
+		# 	PROJECT_DIRS+=("${dir}")
+		# done
+	done
+	echo "${PROJECT_DIRS[@]}"
+	exit
+}
