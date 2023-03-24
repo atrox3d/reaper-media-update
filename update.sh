@@ -9,13 +9,15 @@
 #
 function syntax()
 {
-	echo "SYNTAX | $0 [ -lpcxun ]"
+	echo "SYNTAX | $0 [ -hlpcxun -f {dir-file} ]"
+	echo "SYNTAX | -h prints this help and exits"
 	echo "SYNTAX | -l list dirs and exits"
 	echo "SYNTAX | -p push"
 	echo "SYNTAX | -c autocommit"
 	echo "SYNTAX | -x autocommit AND push"
 	echo "SYNTAX | -u pull (default)"
 	echo "SYNTAX | -n no autoupdate script"
+	echo "SYNTAX | -f {dir-file} | use {dir-file as input}"
 }
 #
 # updates this script
@@ -64,7 +66,7 @@ DIRFILE="${HERE}/dirs.txt"
 # parse options
 # 
 OPTIND=1
-while getopts ":lpcxhun" option
+while getopts ":lpcxhunf:" option
 do
 	case $option in
 		u)
@@ -92,6 +94,15 @@ do
 		n)
 			echo "INFO   | GIT AUTOUPDATE disabled"
 			GIT_AUTOUPDATE=false
+		;;
+		f)
+			DIRFILE="${HERE}/${OPTARG}"
+			echo "INFO   | DIRFILE=${DIRFILE}"
+			[ -f "${DIRFILE}" ] || {
+				echo "FATAL  | ${DIRFILE} does not exists"
+				ls -l
+				exit 1
+			}
 		;;
 		#
 		# start fallthrough for invalid/missing options and help
@@ -127,6 +138,7 @@ then
 	git_autoupdate
 fi
 #
+# list working dihprints this help and exits
 # list working dirs
 #
 list_dirs
