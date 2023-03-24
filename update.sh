@@ -8,7 +8,6 @@ HERE="$(dirname ${BASH_SOURCE[0]})"
 . "${HERE}/git_autoupdate.include"
 . "${HERE}/list_dirs.include"
 . "${HERE}/autodiscover.include"
-
 # 
 # set defaults
 #
@@ -20,7 +19,7 @@ JUST_LISTDIRS=false
 NO_OPTIONS=false
 GIT_AUTOUPDATE=true
 DIRFILE="${HERE}/PROJECT_DIRS.txt"
-AUTODISCOVER_CONFIG="${HERE}/.autodiscover.config"
+AUTODISCOVER_CONFIG="${HERE}/autodiscover.config"
 # 
 # parse options
 # 
