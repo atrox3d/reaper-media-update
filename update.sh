@@ -9,7 +9,7 @@
 #
 function syntax()
 {
-	echo "SYNTAX | $0 [ -p -c -a ]"
+	echo "SYNTAX | $0 [ -lpcxun ]"
 	echo "SYNTAX | -l list dirs and exits"
 	echo "SYNTAX | -p push"
 	echo "SYNTAX | -c autocommit"
@@ -17,7 +17,9 @@ function syntax()
 	echo "SYNTAX | -u pull (default)"
 	echo "SYNTAX | -n no autoupdate script"
 }
-
+#
+# updates this script
+#
 function git_autoupdate()
 {
 	local here="$(dirname ${BASH_SOURCE[0]})"
@@ -36,11 +38,13 @@ function list_dirs()
 	echo "INFO   | reading from ${DIRFILE}..."
 	dirs=($(cat "${DIRFILE}" | sort))
 	echo "INFO   | found ${#dirs[@]} dirs:"
+
 	for d in "${dirs[@]}"
 	do
 		echo "INFO   | ${d}"
 	done
-	if $LISTDIRS
+	
+	if $JUST_LISTDIRS
 	then
 		exit
 	fi
@@ -51,7 +55,7 @@ function list_dirs()
 PULL=true
 PUSH=false
 AUTOCOMMIT=false
-LISTDIRS=false
+JUST_LISTDIRS=false
 NO_OPTIONS=false
 GIT_AUTOUPDATE=true
 HERE="$(dirname ${BASH_SOURCE[0]})"
@@ -65,9 +69,11 @@ do
 	case $option in
 		u)
 			PULL=true
+			echo "INFO   | PULL enabled"
 		;;
 		l)
-			LISTDIRS=true
+			JUST_LISTDIRS=true
+			echo "INFO   | JUST_LISTDIRS enabled"
 		;;
 		p)
 			PUSH=true
@@ -125,13 +131,16 @@ fi
 #
 list_dirs
 #
-# MAIN LOOP
+# default
 #
 if $NO_OPTIONS
 then
 	echo 'INFO   | no options detected, PULL ENABLED'
 	PULL=true
 fi
+#
+# MAIN LOOP
+#
 for d in ${dirs[@]}
 do
 	#
