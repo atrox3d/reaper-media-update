@@ -5,13 +5,13 @@
 #
 function list_dirs()
 {
-	echo "INFO   | reading from ${DIRFILE}..."
+	info "reading from ${DIRFILE}..."
 	PROJECT_DIRS=($(cat "${DIRFILE}" | sort))
-	echo "INFO   | found ${#PROJECT_DIRS[@]} PROJECT_DIRS:"
+	info "found ${#PROJECT_DIRS[@]} PROJECT_DIRS:"
 
 	for d in "${PROJECT_DIRS[@]}"
 	do
-		echo "INFO   | ${d}"
+		info "${d}"
 	done
 	
 	if $JUST_LISTDIRS

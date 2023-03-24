@@ -12,7 +12,7 @@ INCLUDE_FILES=(
 
 for INCLUDE in "${INCLUDE_FILES[@]}"
 do
-	echo "INFO  | sourcing ${HERE}/${INCLUDE}..."
+	# debug "sourcing ${HERE}/${INCLUDE}..."
 	. "${HERE}/${INCLUDE}" || {
 		echo "FATAL | cannot source ${HERE}/${INCLUDE}"
 		exit 1

@@ -24,7 +24,7 @@ parse_options "${@}"
 #
 # default: no options
 #
-$NO_OPTIONS && { echo 'INFO   | no options detected, PULL ENABLED';PULL=true; }
+$NO_OPTIONS && { info "no options detected, PULL ENABLED";PULL=true; }
 #
 # always use last version
 #

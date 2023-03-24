@@ -7,9 +7,9 @@ function git_autoupdate()
 {
 	local here="$(dirname ${BASH_SOURCE[0]})"
 	(
-		echo "INFO   | GIT AUTOUPDATE SCRIPT | cd ${here}..."
+		info "GIT AUTOUPDATE SCRIPT | cd ${here}..."
 		cd "${here}"
-		echo "INFO   | GIT AUTOUPDATE SCRIPT | git pull..."
+		info "GIT AUTOUPDATE SCRIPT | git pull..."
 		git pull
 	)
 }

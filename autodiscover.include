@@ -13,15 +13,15 @@ function autodiscover()
 	# get list of roots in array
 	#PROJECT_DIRS=($(cat "${DIRFILE}" | sort))
 	roots=($(cat "${AUTODISCOVER_CONFIG}" | sort))
-	echo "INFO   | found ${#roots[@]} roots:"
-	echo "INFO   | roots | ${roots[@]}"
+	info "found ${#roots[@]} roots:"
+	info "roots | ${roots[@]}"
 
 	for root in "${roots[@]}"
 	do
-		echo "INFO   | root | ${root}"
+		info "root | ${root}"
 		dirs=("${root}"/*)
-		# echo "INFO   | dirs[@] | ${dirs[@]}"
-		# echo "INFO   | dirs | ${dirs}"
+		# info "dirs[@] | ${dirs[@]}"
+		# info "dirs | ${dirs}"
 		for dir in "${dirs[@]}"
 		do
 			PROJECT_DIRS+=("${dir}")
