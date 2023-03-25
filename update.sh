@@ -73,7 +73,7 @@ do
 	#
 	if $PULL
 	then
-		info "${d^^} | PULL..."
+		info "PULL       | ${d^^}"
 		(cd $d; git pull)
 	fi
 	#
@@ -81,7 +81,7 @@ do
 	#
 	if $AUTOCOMMIT
 	then
-		info "${d^^} | AUTOCOMMIT..."
+		info "AUTOCOMMIT | ${d^^}"
 		(
 			cd $d
 			git add .
@@ -93,7 +93,7 @@ do
 	#
 	if $PUSH 
 	then
-		info "${d^^} | PUSH..."
+		info "PUSH       | ${d^^}"
 		(cd $d; git push)
 	fi
 done
