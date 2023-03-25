@@ -152,6 +152,10 @@ function logger_islevelenabled()
 #	general log function
 #
 ######################################################
+ENABLE_TIMESTAMP=false
+ENABLE_DATE=true
+ENABLE_TIME=true
+ENABLE_WHO=false
 function log()
 {
 	#
@@ -230,7 +234,26 @@ function log()
 	
 	# echo "${_datestamp} | ${_timestamp} | ${_formatted_who} | ${_level} | ${_message}" >&2
 	# echo "${BASH_SOURCE[@]}"
-	echo "${_datestamp} ${_timestamp} | ${_formatted_who} | ${_level} | ${_message}" >&2
+	local _out=""
+	if ${ENABLE_TIMESTAMP}
+	then
+		if ${ENABLE_DATE}
+		then
+			_out="${_out}${_datestamp} "
+		fi
+		if ${ENABLE_TIME}
+		then
+			_out="${_out}${_timestamp} "
+		fi
+		_out="${_out} | "
+	fi
+	if ${ENABLE_WHO}
+	then
+		_out="${_out}${_formatted_who} | "
+	fi
+	_out="${_out}${_level} | ${_message}"
+	# echo "${_datestamp} ${_timestamp} | ${_formatted_who} | ${_level} | ${_message}" >&2
+	echo "${_out}" >&2
 }
 #
 # level helpers
