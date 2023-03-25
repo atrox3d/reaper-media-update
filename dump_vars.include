@@ -16,8 +16,11 @@ VARS=(
 
 function dump_vars()
 {
+    local out
     for v in "${VARS[@]}"
     do
-        info "var | $v=${!v}"
+        # info "var | $v=${!v}"
+        printf -v out "var | %-20.20s : %s" ${v} ${!v}
+        info "${out}"
     done
 }
