@@ -53,30 +53,30 @@ dump_vars
 #
 # MAIN LOOP
 #
-for d in ${PROJECT_DIRS[@]}
+for directory in ${PROJECT_DIRS[@]}
 do
 	# check for dir existence
-	if [ ! -d "${d}" ]
+	if [ ! -d "${directory}" ]
 	then
-		fatal "${d} | does not exist"
+		fatal "${directory} | does not exist"
 		exit 1
 	fi
 	# check for git repo
-	if [ ! -d "${d}/.git/" ]
+	if [ ! -d "${directory}/.git/" ]
 	then
-		warn "${d} | not a git repo"
+		warn "${directory} | not a git repo"
 		continue
 	fi
 	# PULL
 	if $PULL
 	then
-		info "PULL       | ${d^^}"
-		(cd $d; git pull)
+		info "PULL       | ${directory}"
+		(cd "${directory}"; git pull)
 	fi
 	# AUTOCOMMIT
 	if $AUTOCOMMIT
 	then
-		info "AUTOCOMMIT | ${d^^}"
+		info "AUTOCOMMIT | ${directory}"
 		(
 			cd $d
 			git add .
@@ -86,7 +86,7 @@ do
 	# PUSH
 	if $PUSH 
 	then
-		info "PUSH       | ${d^^}"
-		(cd $d; git push)
+		info "PUSH       | ${directory}"
+		(cd "${directory}"; git push)
 	fi
 done
