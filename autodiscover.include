@@ -7,7 +7,7 @@ function autodiscover()
 {
 	# check if autodiscover config exists
 	[ -f ${AUTODISCOVER_CONFIG} ] || {
-		echo "FATAL   | ${AUTODISCOVER_CONFIG} does not exist"
+		fatal "${AUTODISCOVER_CONFIG} does not exist"
 		exit 1
 	}
 	# get list of roots in array

@@ -18,6 +18,6 @@ function dump_vars()
 {
     for v in "${VARS[@]}"
     do
-        echo "INFO  | var | $v=${!v}"
+        info "var | $v=${!v}"
     done
 }
