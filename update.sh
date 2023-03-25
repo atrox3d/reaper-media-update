@@ -24,7 +24,10 @@ parse_options "${@}"
 #
 # default: no options
 #
-$NO_OPTIONS && { info "no options detected, PULL ENABLED";PULL=true; }
+$NO_OPTIONS && { 
+	info "no options detected, PULL ENABLED"
+	PULL=true
+}
 #
 # always use last version
 #
@@ -52,33 +55,25 @@ dump_vars
 #
 for d in ${PROJECT_DIRS[@]}
 do
-	#
 	# check for dir existence
-	#
 	if [ ! -d "${d}" ]
 	then
 		fatal "${d} | does not exist"
 		exit 1
 	fi
-	#
 	# check for git repo
-	#
 	if [ ! -d "${d}/.git/" ]
 	then
 		warn "${d} | not a git repo"
 		continue
 	fi
-	#
 	# PULL
-	#
 	if $PULL
 	then
 		info "PULL       | ${d^^}"
 		(cd $d; git pull)
 	fi
-	#
 	# AUTOCOMMIT
-	#
 	if $AUTOCOMMIT
 	then
 		info "AUTOCOMMIT | ${d^^}"
@@ -88,9 +83,7 @@ do
 			git commit -am "autoupdate"
 		)
 	fi
-	#
 	# PUSH
-	#
 	if $PUSH 
 	then
 		info "PUSH       | ${d^^}"
