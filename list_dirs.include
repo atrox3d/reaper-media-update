@@ -5,10 +5,6 @@
 #
 function list_dirs()
 {
-	info "reading from ${DIRFILE}..."
-	PROJECT_DIRS=($(cat "${DIRFILE}" | sort))
-	info "found ${#PROJECT_DIRS[@]} PROJECT_DIRS:"
-
 	for d in "${PROJECT_DIRS[@]}"
 	do
 		info "${d}"

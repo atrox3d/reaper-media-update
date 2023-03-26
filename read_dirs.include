@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#
+# read input PROJECT_DIRS from file into array
+#
+function read_dirs()
+{
+	info "reading from ${DIRFILE}..."
+	PROJECT_DIRS=($(cat "${DIRFILE}" | sort))
+	info "found ${#PROJECT_DIRS[@]} PROJECT_DIRS:"
+}

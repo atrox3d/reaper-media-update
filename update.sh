@@ -19,6 +19,7 @@ DEFAULT_DIRFILE="${HERE}/dirs.txt"
 DIRFILE=
 AUTODISCOVER_CONFIG="${HERE}/autodiscover.config"
 AUTODISCOVER=true
+READ_DIRS=false
 
 parse_options "${@}"
 #
@@ -39,17 +40,20 @@ if [ ${DIRFILE:-UNDEFINED} == UNDEFINED ]
 then
 	DIRFILE="${DEFAULT_DIRFILE}"
 else
+	READ_DIRS=true
 	AUTODISCOVER=false
 fi
-${JUST_LISTDIRS} && AUTODISCOVER=false
-#
-# populate array of directories
-#
-${AUTODISCOVER} && autodiscover || list_dirs
 #
 # print all vars
 #
 dump_vars
+#
+# populate array of directories
+#
+${AUTODISCOVER} && autodiscover
+${READ_DIRS} && read_dirs
+
+${JUST_LISTDIRS} && list_dirs
 #
 # MAIN LOOP
 #

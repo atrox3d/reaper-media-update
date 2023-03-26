@@ -12,6 +12,7 @@ VARS=(
     DIRFILE
     AUTODISCOVER_CONFIG
     AUTODISCOVER
+    READ_DIRS
 )
 
 function dump_vars()

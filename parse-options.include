@@ -7,12 +7,16 @@
     # 
     # echo "params $@"
     OPTIND=1
-    while getopts ":alpcxhunf:" option
+    while getopts ":arlpcxhunf:" option
     do
         case $option in
             a)
                 AUTODISCOVER=true
                 info "AUTODISCOVER enabled"
+            ;;
+            r)
+                READ_DIRS=true
+                info "READ_DIRS enabled"
             ;;
             u)
                 PULL=true

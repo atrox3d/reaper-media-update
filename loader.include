@@ -8,6 +8,7 @@ INCLUDE_FILES=(
 	autodiscover.include
 	parse-options.include
 	dump_vars.include
+	read_dirs.include
 )
 
 for INCLUDE in "${INCLUDE_FILES[@]}"
