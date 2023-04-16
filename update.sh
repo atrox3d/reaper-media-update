@@ -59,6 +59,11 @@ ${JUST_LISTDIRS} && list_dirs
 #
 for directory in ${PROJECT_DIRS[@]}
 do
+	echo '######################################################################'
+	echo '#                                                                    #'
+	echo '#                  '"${directory^^}"
+	echo '#                                                                    #'
+	echo '######################################################################'
 	# check for dir existence
 	if [ ! -d "${directory}" ]
 	then
