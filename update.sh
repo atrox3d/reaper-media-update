@@ -82,7 +82,7 @@ do
 	then
 		info "AUTOCOMMIT | ${directory}"
 		(
-			cd $d
+			cd "${directory}"
 			git add .
 			git commit -am "autoupdate"
 		)
