@@ -19,7 +19,7 @@ function autodiscover()
 	for root in "${roots[@]}"
 	do
 		info "root | ${root}"
-		dirs=("${root}"/*)
+		dirs=("${root}"/*/)
 		# info "dirs[@] | ${dirs[@]}"
 		# info "dirs | ${dirs}"
 		for dir in "${dirs[@]}"
