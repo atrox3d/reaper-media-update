@@ -3,7 +3,13 @@
 #
 # NOTE: execute script from parent dir ..
 #
-HERE="$(dirname ${BASH_SOURCE[0]})"
+echo "${0}"
+HERE="$(dirname ${0})"
+# echo "${HERE}"
+# cd "$HERE"
+# ls
+# exit
+cd "${HERE}/.."
 . "${HERE}/loader.include"
 
 # set defaults
