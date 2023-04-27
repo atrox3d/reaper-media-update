@@ -87,7 +87,10 @@ do
 	then
 		info "PULL       | ${directory}"
 		(cd "${directory}"; git pull)
-		[ $? == 0 ] || exit $?
+		[ $? == 0 ] || {
+			fatal "errorlevel is not zero"
+			exit $?
+		}
 	fi
 	# AUTOCOMMIT
 	if $AUTOCOMMIT
@@ -98,13 +101,19 @@ do
 			git add .
 			git commit -am "autoupdate"
 		)
-		[ $? == 0 ] || exit $?
+		[ $? == 0 ] || {
+			fatal "errorlevel is not zero"
+			exit $?
+		}
 	fi
 	# PUSH
 	if $PUSH 
 	then
 		info "PUSH       | ${directory}"
 		(cd "${directory}"; git push)
-		[ $? == 0 ] || exit $?
+		[ $? == 0 ] || {
+			fatal "errorlevel is not zero"
+			exit $?
+		}
 	fi
 done
