@@ -66,6 +66,7 @@ function die()
 {
 	local exitcode=$?
 	fatal "${@}"
+	dump_vars
 	exit $exitcode
 }
 #

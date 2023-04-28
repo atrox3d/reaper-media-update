@@ -13,7 +13,7 @@ VARS=(
     AUTODISCOVER_CONFIG
     AUTODISCOVER
     READ_DIRS
-    IGNORE_ERROS
+    IGNORE_ERRORS
 )
 
 function dump_vars()
