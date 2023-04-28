@@ -11,7 +11,7 @@
     do
         case $option in
             i)
-                IGNORE_ERROS=true
+                IGNORE_ERRORS=true
                 info "IGNORE_ERRORS enabled"
             ;;
             a)
