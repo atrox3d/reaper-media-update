@@ -7,7 +7,7 @@
     # 
     # echo "params $@"
     OPTIND=1
-    while getopts ":arlpcxhunf:" option
+    while getopts ":iarlpcxhunf:" option
     do
         case $option in
             i)

@@ -7,6 +7,7 @@ function syntax()
 {
 	echo "SYNTAX | $0 [ -harlpcxhun -f {dir-file} ]"
 	echo "SYNTAX | -h prints this help and exits"
+	echo "SYNTAX | -i ignore errors"
 	echo "SYNTAX | -a enable autodiscover dirs (default)"
 	echo "SYNTAX | -r read dirs from dir-file"
 	echo "SYNTAX | -l list PROJECT_DIRS and exits"
