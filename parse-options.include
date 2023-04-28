@@ -10,6 +10,10 @@
     while getopts ":arlpcxhunf:" option
     do
         case $option in
+            i)
+                IGNORE_ERROS=true
+                info "IGNORE_ERRORS enabled"
+            ;;
             a)
                 AUTODISCOVER=true
                 info "AUTODISCOVER enabled"

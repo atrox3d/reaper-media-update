@@ -26,6 +26,7 @@ DIRFILE=
 AUTODISCOVER_CONFIG="${HERE}/autodiscover.config"
 AUTODISCOVER=true
 READ_DIRS=false
+IGNORE_ERRORS=false
 
 parse_options "${@}"
 #
@@ -60,6 +61,13 @@ ${AUTODISCOVER} && autodiscover
 ${READ_DIRS} && read_dirs
 
 ${JUST_LISTDIRS} && list_dirs
+
+function die()
+{
+	local exitcode=$?
+	fatal "${@}"
+	exit $exitcode
+}
 #
 # MAIN LOOP
 #
@@ -87,10 +95,10 @@ do
 	then
 		info "PULL       | ${directory}"
 		(cd "${directory}"; git pull)
-		[ $? == 0 ] || {
-			fatal "errorlevel is not zero"
-			exit $?
-		}
+		if ! $IGNORE_ERRORS
+		then
+			[ $? == 0 ] || die "errorlevel is not zero"
+		fi
 	fi
 	# AUTOCOMMIT
 	if $AUTOCOMMIT
@@ -101,19 +109,19 @@ do
 			git add .
 			git commit -am "autoupdate"
 		)
-		[ $? == 0 ] || {
-			fatal "errorlevel is not zero"
-			exit $?
-		}
+		if ! $IGNORE_ERRORS
+		then
+			[ $? == 0 ] || die "errorlevel is not zero"
+		fi
 	fi
 	# PUSH
 	if $PUSH 
 	then
 		info "PUSH       | ${directory}"
 		(cd "${directory}"; git push)
-		[ $? == 0 ] || {
-			fatal "errorlevel is not zero"
-			exit $?
-		}
+		if ! $IGNORE_ERRORS
+		then
+			[ $? == 0 ] || die "errorlevel is not zero"
+		fi
 	fi
 done
