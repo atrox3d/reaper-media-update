@@ -95,9 +95,11 @@ do
 	then
 		info "PULL       | ${directory}"
 		(cd "${directory}"; git pull)
-		if ! $IGNORE_ERRORS
+		if [ $? -ne 0 ]
 		then
-			[ $? == 0 ] || die "errorlevel is not zero"
+			$IGNORE_ERRORS || die "errorlevel is not zero"
+		else
+			warn "exit code was $?"
 		fi
 	fi
 	# AUTOCOMMIT
@@ -109,9 +111,11 @@ do
 			git add .
 			git commit -am "autoupdate"
 		)
-		if ! $IGNORE_ERRORS
+		if [ $? -ne 0 ]
 		then
-			[ $? == 0 ] || die "errorlevel is not zero"
+			$IGNORE_ERRORS || die "errorlevel is not zero"
+		else
+			warn "exit code was $?"
 		fi
 	fi
 	# PUSH
@@ -119,9 +123,11 @@ do
 	then
 		info "PUSH       | ${directory}"
 		(cd "${directory}"; git push)
-		if ! $IGNORE_ERRORS
+		if [ $? -ne 0 ]
 		then
-			[ $? == 0 ] || die "errorlevel is not zero"
+			$IGNORE_ERRORS || die "errorlevel is not zero"
+		else
+			warn "exit code was $?"
 		fi
 	fi
 done
