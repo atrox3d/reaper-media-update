@@ -97,9 +97,11 @@ do
 		(cd "${directory}"; git pull)
 		if [ $? -ne 0 ]
 		then
-			$IGNORE_ERRORS || die "errorlevel is not zero"
-		else
-			warn "exit code was $?"
+			$IGNORE_ERRORS && {
+				warn "exit code was $?"
+			} || {
+				die "errorlevel is not zero"
+			}
 		fi
 	fi
 	# AUTOCOMMIT
@@ -113,9 +115,11 @@ do
 		)
 		if [ $? -ne 0 ]
 		then
-			$IGNORE_ERRORS || die "errorlevel is not zero"
-		else
-			warn "exit code was $?"
+			$IGNORE_ERRORS && {
+				warn "exit code was $?"
+			} || {
+				die "errorlevel is not zero"
+			}
 		fi
 	fi
 	# PUSH
@@ -125,9 +129,11 @@ do
 		(cd "${directory}"; git push)
 		if [ $? -ne 0 ]
 		then
-			$IGNORE_ERRORS || die "errorlevel is not zero"
-		else
-			warn "exit code was $?"
+			$IGNORE_ERRORS && {
+				warn "exit code was $?"
+			} || {
+				die "errorlevel is not zero"
+			}
 		fi
 	fi
 done
