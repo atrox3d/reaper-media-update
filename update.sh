@@ -100,7 +100,7 @@ do
 			$IGNORE_ERRORS && {
 				warn "exit code was $?"
 			} || {
-				die "errorlevel is not zero"
+				die "errorlevel is not zero: $?"
 			}
 		fi
 	fi
@@ -118,7 +118,7 @@ do
 			$IGNORE_ERRORS && {
 				warn "exit code was $?"
 			} || {
-				die "errorlevel is not zero"
+				die "errorlevel is not zero: $?"
 			}
 		fi
 	fi
@@ -132,7 +132,7 @@ do
 			$IGNORE_ERRORS && {
 				warn "exit code was $?"
 			} || {
-				die "errorlevel is not zero"
+				die "errorlevel is not zero: $?"
 			}
 		fi
 	fi
