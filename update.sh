@@ -29,20 +29,20 @@ READ_DIRS=false
 IGNORE_ERRORS=false
 
 parse_options "${@}"
-#
+#######################################################
 # default: no options
-#
+#######################################################
 $NO_OPTIONS && { 
 	info "no options detected, PULL ENABLED"
 	PULL=true
 }
-#
+#######################################################
 # always use last version
-#
+#######################################################
 $GIT_AUTOUPDATE && git_autoupdate
-#
+#######################################################
 # set variables
-#
+#######################################################
 if [ ${DIRFILE:-UNDEFINED} == UNDEFINED ]
 then
 	DIRFILE="${DEFAULT_DIRFILE}"
@@ -50,13 +50,13 @@ else
 	READ_DIRS=true
 	AUTODISCOVER=false
 fi
-#
+#######################################################
 # print all vars
-#
+#######################################################
 dump_vars
-#
-# populate array of directories
-#
+#######################################################
+# populate array of directories PROJECT_DIRS
+#######################################################
 ${AUTODISCOVER} && autodiscover
 ${READ_DIRS} && read_dirs
 
@@ -69,9 +69,9 @@ function die()
 	dump_vars
 	exit $exitcode
 }
-#
+#######################################################
 # MAIN LOOP
-#
+#######################################################
 for directory in ${PROJECT_DIRS[@]}
 do
 	echo '######################################################################'
@@ -79,19 +79,25 @@ do
 	echo '#                  '"${directory^^}"
 	echo '#                                                                    #'
 	echo '######################################################################'
+	#######################################################
 	# check for dir existence
+	#######################################################
 	if [ ! -d "${directory}" ]
 	then
 		fatal "${directory} | does not exist"
 		exit 1
 	fi
+	#######################################################
 	# check for git repo
+	#######################################################
 	if [ ! -d "${directory}/.git/" ]
 	then
 		warn "${directory} | not a git repo"
 		continue
 	fi
+	#######################################################
 	# PULL
+	#######################################################
 	if $PULL
 	then
 		info "PULL       | ${directory}"
@@ -106,7 +112,9 @@ do
 			}
 		fi
 	fi
+	#######################################################
 	# AUTOCOMMIT
+	#######################################################
 	if $AUTOCOMMIT
 	then
 		info "AUTOCOMMIT | ${directory}"
@@ -125,7 +133,9 @@ do
 			}
 		fi
 	fi
+	#######################################################
 	# PUSH
+	#######################################################
 	if $PUSH 
 	then
 		info "PUSH       | ${directory}"
