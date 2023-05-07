@@ -96,12 +96,13 @@ do
 	then
 		info "PULL       | ${directory}"
 		(cd "${directory}"; git pull)
-		if [ $? -ne 0 ]
+		exitcode=$?
+		if [ $exitcode -ne 0 ]
 		then
 			$IGNORE_ERRORS && {
-				warn "exit code was $?"
+				warn "exit code was $exitcode"
 			} || {
-				die "errorlevel is not zero: $?"
+				die "errorlevel is not zero: $exitcode"
 			}
 		fi
 	fi
@@ -114,12 +115,13 @@ do
 			git add .
 			git commit -am "autoupdate"
 		)
-		if [ $? -ne 0 ]
+		exitcode=$?
+		if [ $exitcode -ne 0 ]
 		then
 			$IGNORE_ERRORS && {
-				warn "exit code was $?"
+				warn "exit code was $exitcode"
 			} || {
-				die "errorlevel is not zero: $?"
+				die "errorlevel is not zero: $exitcode"
 			}
 		fi
 	fi
@@ -128,12 +130,13 @@ do
 	then
 		info "PUSH       | ${directory}"
 		(cd "${directory}"; git push)
-		if [ $? -ne 0 ]
+		exitcode=$?
+		if [ $exitcode -ne 0 ]
 		then
 			$IGNORE_ERRORS && {
-				warn "exit code was $?"
+				warn "exit code was $exitcode"
 			} || {
-				die "errorlevel is not zero: $?"
+				die "errorlevel is not zero: $exitcode"
 			}
 		fi
 	fi
