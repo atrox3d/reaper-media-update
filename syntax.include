@@ -16,5 +16,6 @@ function syntax()
 	echo "SYNTAX | -x autocommit AND push"
 	echo "SYNTAX | -u pull (default)"
 	echo "SYNTAX | -n no autoupdate script"
-	echo "SYNTAX | -f {dir-file} | use {dir-file as input}"
+	echo "SYNTAX | -f {dir-file}: use {dir-file as input}"
+	echo "SYNTAX | -m {match}: filters dir containing word"
 }

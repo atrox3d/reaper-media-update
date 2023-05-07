@@ -14,6 +14,7 @@ VARS=(
     AUTODISCOVER
     READ_DIRS
     IGNORE_ERRORS
+    MATCH
 )
 
 function dump_vars()

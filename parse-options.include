@@ -7,7 +7,7 @@
     # 
     # echo "params $@"
     OPTIND=1
-    while getopts ":iarlpcxhunf:" option
+    while getopts ":iarlpcxhunf:m:" option
     do
         case $option in
             i)
@@ -56,6 +56,10 @@
                     ls -l
                     exit 1
                 }
+            ;;
+            m)
+                MATCH="${OPTARG}"
+                info "FILTER DIRS matching *${MATCH}*"
             ;;
             #
             # start fallthrough for invalid/missing options and help

@@ -12,6 +12,8 @@ HERE="$(dirname ${0})"
 cd "${HERE}/.."
 . "${HERE}/loader.include"
 
+logger_setlevel INFO
+
 # set defaults
 #
 PULL=true
@@ -27,6 +29,7 @@ AUTODISCOVER_CONFIG="${HERE}/autodiscover.config"
 AUTODISCOVER=true
 READ_DIRS=false
 IGNORE_ERRORS=false
+MATCH=""
 
 parse_options "${@}"
 #######################################################
@@ -69,10 +72,31 @@ function die()
 	dump_vars
 	exit $exitcode
 }
+
+if [ "${MATCH:-EMPTY}" != "EMPTY" ]
+then
+	info "matching dirs with '*${MATCH}*'..."
+	DIRS=()
+	for directory in "${PROJECT_DIRS[@]}"
+	do
+		debug "matching dir: '${directory}' with '*${MATCH}*'..."
+		case "${directory}" in
+			*"${MATCH}"*)
+				debug "MATCH! dir '${directory}'"
+				DIRS+=("${directory}")
+			;;
+			*)
+				debug "NO MATCH! dir '${directory}'"
+			;;
+		esac
+	done
+else
+	DIRS=("${PROJECT_DIRS[@]}")
+fi
 #######################################################
 # MAIN LOOP
 #######################################################
-for directory in ${PROJECT_DIRS[@]}
+for directory in "${DIRS[@]}"
 do
 	echo '######################################################################'
 	echo '#                                                                    #'
