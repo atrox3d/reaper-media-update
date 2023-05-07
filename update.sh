@@ -116,7 +116,16 @@ do
 	#######################################################
 	if [ ! -d "${directory}/.git/" ]
 	then
-		warn "${directory} | not a git repo"
+		warn "${directory} | not a git repo, SKIPPING"
+		continue
+	fi
+	#######################################################
+	# check for remotes
+	#######################################################
+	remote="$(cd "${directory}"; git remote -v)"
+	if [ "${remote:-NOREMOTE}" == NOREMOTE ]
+	then
+		warn "${directory} | has no remotes, SKIPPING"
 		continue
 	fi
 	#######################################################
