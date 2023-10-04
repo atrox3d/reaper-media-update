@@ -1,4 +1,4 @@
-#!env bash
+#!/usr/bin/env bash
 echo cd "${1}"
 cd "${1}"
 

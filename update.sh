@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
 # NOTE: execute script from parent dir ..
 #
 echo "${0}"
 HERE="$(dirname ${0})"
-# echo "${HERE}"
+echo "HERE=${HERE}"
 # cd "$HERE"
 # ls
 # exit
