@@ -1,4 +1,8 @@
 #!env bash
+
+echo mkdir -p "${1}"/mp3
+mkdir -p "${1}"/mp3
+
 echo cd "${1}"
 cd "${1}"
 

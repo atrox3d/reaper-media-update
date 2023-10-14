@@ -4,3 +4,6 @@ cochise cochise-moises
 spoonman spoonman-moises 
 killing-in-the-name-of-moises
 you-know-my-name-moises
+alive-moises
+jeremy-moises
+even-flow-moises
