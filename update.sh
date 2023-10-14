@@ -133,17 +133,30 @@ do
 	#######################################################
 	if $PULL
 	then
-		info "PULL       | ${directory}"
-		(cd "${directory}"; git pull)
-		exitcode=$?
-		if [ $exitcode -ne 0 ]
-		then
-			$IGNORE_ERRORS && {
-				warn "exit code was $exitcode"
-			} || {
-				die "errorlevel is not zero: $exitcode"
-			}
-		fi
+		DONE_PULL=false
+		while ! $DONE_PULL
+		do
+			info "PULL       | ${directory}"
+			PULL_OUTPUT="$(cd "${directory}"; git pull 2>&1)"
+			exitcode=$?
+			echo "$PULL_OUTPUT"
+			echo "exitcode: $exitcode"
+			if [ $exitcode -ne 0 ]
+			then
+				grep -iq "error in the HTTP2 framing layer" <<< "$PULL_OUTPUT" && {
+					echo "retrying..."
+					sleep 1
+					continue
+				}
+				$IGNORE_ERRORS && {
+					warn "exit code was $exitcode"
+				} || {
+					die "errorlevel is not zero: $exitcode"
+				}
+			else
+				DONE_PULL=true
+			fi
+		done
 	fi
 	#######################################################
 	# AUTOCOMMIT
