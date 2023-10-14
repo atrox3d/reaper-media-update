@@ -136,8 +136,16 @@ do
 		DONE_PULL=false
 		while ! $DONE_PULL
 		do
+			info "SWITCH     | macOS"
+			(
+				cd "${directory}"
+				git switch macOS
+			)
 			info "PULL       | ${directory}"
-			PULL_OUTPUT="$(cd "${directory}"; git pull 2>&1)"
+			PULL_OUTPUT="$(
+							cd "${directory}"
+							git pull 2>&1
+						)"
 			exitcode=$?
 			echo "$PULL_OUTPUT"
 			echo "exitcode: $exitcode"
@@ -145,7 +153,7 @@ do
 			then
 				grep -iq "error in the HTTP2 framing layer" <<< "$PULL_OUTPUT" && {
 					echo "retrying..."
-					sleep 1
+					sleep 2
 					continue
 				}
 				$IGNORE_ERRORS && {
