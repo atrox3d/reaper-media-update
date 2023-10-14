@@ -1,4 +1,4 @@
-#!env bash
+#!/usr/bin/env bash
 
 echo mkdir -p "${1}"/mp3
 mkdir -p "${1}"/mp3
