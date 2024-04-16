@@ -47,21 +47,38 @@ def parse():
     parser.add_argument('-a', '--addall', action='store_true', default=False)
     parser.add_argument('-x', '--all', action='store_true', default=False)
     parser.add_argument('-s', '--skipuptodate', action='store_true', default=False)
+    parser.add_argument('-l', '--listrepos', action='store_true', default=False)
+    parser.add_argument('-f', '--filter', nargs='+', default=None,
+                        choices='dirty push pull'.split())
+    parser.add_argument_group
     args = parser.parse_args()
     return args
 
 if __name__ == '__main__':
     args = parse()
     print(args)
-    
+
     for repo in repos.scan(BASE_DIR, remote=True):
         git.fetch(repo)
         status = git.get_status(repo)
 
+
         if args.skipuptodate and not status.dirty and not status.need_pull and not status.need_push:
             continue
 
+        if 'dirty' in args.filter and not status.dirty:
+            continue
+        if 'pull' in args.filter and not status.need_pull:
+            continue
+        if 'push' in args.filter and not status.need_push:
+            continue
+
+
+        if args.listrepos:
+            print('/'.join(repo.get_path().parts[-2:]))
+            continue
         printheader(repo)
+
         printinfo(repo, status)
 
         if args.pull:
