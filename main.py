@@ -46,13 +46,20 @@ def parse():
     parser.add_argument('-P', '--push', action='store_true', default=False)
     parser.add_argument('-a', '--addall', action='store_true', default=False)
     parser.add_argument('-x', '--all', action='store_true', default=False)
-    parser.add_argument('-s', '--skipuptodate', action='store_true', default=False)
+    parser.add_argument('-s', '--skipclean', action='store_true', default=False)
     parser.add_argument('-l', '--listrepos', action='store_true', default=False)
-    parser.add_argument('-f', '--filter', nargs='+', default=None,
-                        choices='dirty push pull'.split())
+    parser.add_argument('-f', '--filter', nargs='+', default=[],
+                        choices='dirty push pull unclean'.split())
     parser.add_argument_group
     args = parser.parse_args()
     return args
+
+def isclean(status:git.GitStatus) -> bool:
+    return not any([
+                status.dirty,
+                status.need_pull,
+                status.need_push,
+            ])
 
 if __name__ == '__main__':
     args = parse()
@@ -62,10 +69,10 @@ if __name__ == '__main__':
         git.fetch(repo)
         status = git.get_status(repo)
 
-
-        if args.skipuptodate and not status.dirty and not status.need_pull and not status.need_push:
+        if args.skipclean and isclean(status):
             continue
-
+        if 'unclean' in args.filter and isclean(status):
+            continue
         if 'dirty' in args.filter and not status.dirty:
             continue
         if 'pull' in args.filter and not status.need_pull:
@@ -73,12 +80,11 @@ if __name__ == '__main__':
         if 'push' in args.filter and not status.need_push:
             continue
 
-
         if args.listrepos:
             print('/'.join(repo.get_path().parts[-2:]))
             continue
+        
         printheader(repo)
-
         printinfo(repo, status)
 
         if args.pull:
