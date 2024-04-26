@@ -13,9 +13,13 @@ BASE_DIR = '..'
 
 # repos.backup(BASE_DIR, json_path=JSON_PATH, recurse=True)
 
-def printheader(repo:git.GitRepo):
+def printheader(repo:git.GitRepo, width=80):
     print('-' * 80)
-    print('/'.join(repo.get_path().parts[-2:]))
+    path = '/'.join(repo.get_path().parts[-2:])
+    branch = f'{status.branch}: {status.remote_branch}'
+    print(f'{path}{branch:>{width-len(path)}}')
+
+def printfooter():
     print('-' * 80)
 
 def print_files(tag:str, files:list, renamed=False):
@@ -26,7 +30,7 @@ def print_files(tag:str, files:list, renamed=False):
                 print(f'STATUS | {tag} | {file}')
 
 def printinfo(repo:git.GitRepo, status:git.GitStatus):
-    print(f'{status.branch}: {status.remote_branch}')
+    # print(f'{status.branch}: {status.remote_branch}')
     if status.need_pull:
         print('STATUS | PULL needed')
     if status.need_push:
@@ -102,3 +106,4 @@ if __name__ == '__main__':
         if args.push or args.all:
             print(f'PUSH')
             git.push(repo)
+        # printfooter()
