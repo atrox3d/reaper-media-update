@@ -1,9 +1,17 @@
 from pathlib import Path
 import os
 import argparse
+import logging
 
 from atrox3d.simplegit import git, repos
 
+LOGFILE = str(Path(__file__).parent / Path(__file__).stem) + '.log'
+handlers = [
+    logging.FileHandler(LOGFILE, mode='w'),
+    logging.StreamHandler()
+]
+logging.basicConfig(level='DEBUG', format='%(levelname)5s | %(message)s', handlers=handlers)
+logger = logging.getLogger(__name__)
 
 SCRIPT_DIR = Path(__file__).parent
 JSON_PATH = SCRIPT_DIR / 'projects.json'
@@ -69,7 +77,7 @@ if __name__ == '__main__':
     args = parse()
     print(args)
 
-    for repo in repos.scan(BASE_DIR, remote=True):
+    for repo in repos.scan(BASE_DIR, has_remote=True):
         git.fetch(repo)
         status = git.get_status(repo)
 
