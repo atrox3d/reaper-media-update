@@ -138,6 +138,4 @@ if __name__ == '__main__':
                 git.push(repo)
             # printfooter()
         except git.GitException as ge:
-            for line in str(ge).split('\n'):
-                logger.error(line)
-            logger.error('END EXCEPTION')
+            ge.print(printer=logger.error)
