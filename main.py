@@ -5,14 +5,6 @@ import logging
 
 from atrox3d.simplegit import git, repos
 
-LOGFILE = str(Path(__file__).parent / Path(__file__).stem) + '.log'
-handlers = [
-    logging.FileHandler(LOGFILE, mode='w'),
-    logging.StreamHandler()
-]
-logging.basicConfig(level='DEBUG', format='%(levelname)5s | %(message)s', handlers=handlers)
-logger = logging.getLogger(__name__)
-
 SCRIPT_DIR = Path(__file__).parent
 JSON_PATH = SCRIPT_DIR / 'projects.json'
 
@@ -21,23 +13,23 @@ BASE_DIR = '..'
 
 # repos.backup(BASE_DIR, json_path=JSON_PATH, recurse=True)
 
-def printheader(repo:git.GitRepo, width=80):
+def printheader(repo:git.GitRepo, width=80, print=print):
     print('-' * 80)
     path = '/'.join(repo.get_path().parts[-2:])
     branch = f'{status.branch}: {status.remote_branch}'
     print(f'{path}{branch:>{width-len(path)}}')
 
-def printfooter():
+def printfooter(print=print):
     print('-' * 80)
 
-def print_files(tag:str, files:list, renamed=False):
+def print_files(tag:str, files:list, renamed=False, print=print):
         for file in files:
             if renamed:
                 print(f'STATUS | {tag} | {file[0]!r} -> {file[0]!r}')
             else:
                 print(f'STATUS | {tag} | {file}')
 
-def printinfo(repo:git.GitRepo, status:git.GitStatus):
+def printinfo(repo:git.GitRepo, status:git.GitStatus, print=print):
     # print(f'{status.branch}: {status.remote_branch}')
     if status.need_pull:
         print('STATUS | PULL needed')
@@ -53,6 +45,7 @@ def printinfo(repo:git.GitRepo, status:git.GitStatus):
 
 def parse():
     parser = argparse.ArgumentParser()
+    parser.add_argument('-L', '--loglevel', default='INFO')
     parser.add_argument('-c', '--commit', default=None, nargs='?')
     parser.add_argument('-p', '--pull', action='store_true', default=False)
     parser.add_argument('-P', '--push', action='store_true', default=False)
@@ -73,45 +66,78 @@ def isclean(status:git.GitStatus) -> bool:
                 status.need_push,
             ])
 
+def setup_logger(
+                    level: int|str =logging.INFO,
+                    root_level: int|str =logging.INFO,
+                    format: str='%(levelname)5s | %(message)s'
+                ) -> logging.Logger:
+    LOGFILE = str(Path(__file__).parent / Path(__file__).stem) + '.log'
+    handlers = [
+        logging.FileHandler(LOGFILE, mode='w'),
+        logging.StreamHandler()
+    ]
+    logging.basicConfig(level=root_level, format=format, handlers=handlers)
+    logger = logging.getLogger(__name__)
+    logger.setLevel(level)
+    return logger
+
+def print_args(args: argparse.Namespace, print=print) -> None:
+    for arg, value in vars(args).items():
+        print(f'{arg} = {value}')
+    
 if __name__ == '__main__':
     args = parse()
-    print(args)
+    logger = setup_logger(level=args.loglevel.upper())
+    print_args(args, logger.debug)
 
     for repo in repos.scan(BASE_DIR, has_remote=True):
-        git.fetch(repo)
-        status = git.get_status(repo)
+        try:
+            logger.debug(f'fetching {repo.remote}')
+            git.fetch(repo)
+            logger.debug(f'getting status for {repo.path}')
+            status = git.get_status(repo)
 
-        if args.skipclean and isclean(status):
-            continue
-        if 'unclean' in args.filter and isclean(status):
-            continue
-        if 'dirty' in args.filter and not status.dirty:
-            continue
-        if 'pull' in args.filter and not status.need_pull:
-            continue
-        if 'push' in args.filter and not status.need_push:
-            continue
+            if args.skipclean and isclean(status):
+                logger.debug(f'skipping clean repo: {repo.path}')
+                continue
+            if 'unclean' in args.filter and isclean(status):
+                logger.debug(f'skipping clean repo: {repo.path}')
+                continue
+            if 'dirty' in args.filter and not status.dirty:
+                logger.debug(f'skipping non-dirty repo: {repo.path}')
+                continue
+            if 'pull' in args.filter and not status.need_pull:
+                logger.debug(f'skipping non-pull repo: {repo.path}')
+                continue
+            if 'push' in args.filter and not status.need_push:
+                logger.debug(f'skipping non-push repo: {repo.path}')
+                continue
 
-        if args.listrepos:
-            print('/'.join(repo.get_path().parts[-2:]))
-            continue
-        
-        printheader(repo)
-        printinfo(repo, status)
+            if args.listrepos:
+                logger.debug(f'listing only repo: {repo.path}')
+                logger.info('/'.join(repo.get_path().parts[-2:]))
+                continue
+            
+            printheader(repo, print=logger.info)
+            printinfo(repo, status, logger.info)
 
-        if args.pull:
-            print(f'PULL')
-            git.pull(repo)
-        
-        if status.dirty:
-            if args.addall or args.all:
-                print(f'ADDING | all files')
-                git.add(repo, all=True)
-            if args.commit or args.all:
-                print(f'COMMIT | {args.commit or "AUTOMATIC COMMIT"}')
-                git.commit(repo, args.commit or 'AUTOMATIC COMMIT', add_all=args.all)
+            if args.pull:
+                logger.info(f'PULL')
+                git.pull(repo)
+            
+            if status.dirty:
+                if args.addall or args.all:
+                    logger.info(f'ADDING | all files')
+                    git.add(repo, all=True)
+                if args.commit or args.all:
+                    logger.info(f'COMMIT | {args.commit or "AUTOMATIC COMMIT"}')
+                    git.commit(repo, args.commit or 'AUTOMATIC COMMIT', add_all=args.all)
 
-        if args.push or args.all:
-            print(f'PUSH')
-            git.push(repo)
-        # printfooter()
+            if args.push or args.all:
+                logger.info(f'PUSH')
+                git.push(repo)
+            # printfooter()
+        except git.GitException as ge:
+            for line in str(ge).split('\n'):
+                logger.error(line)
+            logger.error('END EXCEPTION')
