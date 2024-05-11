@@ -12,7 +12,7 @@ def setup_logging(
     ]
     logging.basicConfig(level=root_level, format=format, handlers=handlers)
 
-def get_logger(level: int|str =logging.INFO) -> logging.Logger:
-    logger = logging.getLogger(__name__)
+def get_logger(name: str, level: int|str =logging.INFO) -> logging.Logger:
+    logger = logging.getLogger(name)
     logger.setLevel(level)
     return logger

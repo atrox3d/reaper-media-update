@@ -1,5 +1,7 @@
+import log
+logger = log.get_logger(__name__)
 
-from atrox3d.simplegit import git, repos
+from atrox3d.simplegit import git
 
 def isclean(status:git.GitStatus) -> bool:
     return not any([
@@ -15,5 +17,8 @@ def grep(repos: list[git.GitRepo], names: list):
         else:
             for name in names:
                 if name in repo.name:
+                    logger.debug(f'PROCESSING {repo.name}: in name list: {names}')                    
                     yield repo
                     break
+                else:
+                    logger.debug(f'SKIPPING {repo.name}: not in name list: {names}')                    

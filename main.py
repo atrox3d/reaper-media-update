@@ -43,7 +43,8 @@ def meet_args_conditions(repo: git.GitRepo, status: git.GitStatus, args: argpars
 
 if __name__ == '__main__':
     args = options.parse()
-    logger = log.get_logger(level=args.loglevel.upper())
+    logger = log.get_logger(__name__, level=args.loglevel.upper())
+    filters.logger.setLevel(args.loglevel.upper())
     output.print_args(args, logger.debug)
 
     for repo in filters.grep(repos.scan(BASE_DIR, has_remote=True), args.grep):
