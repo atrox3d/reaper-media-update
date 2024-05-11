@@ -13,6 +13,7 @@ def isclean(status:git.GitStatus) -> bool:
 def grep(repos: list[git.GitRepo], names: list):
     for repo in repos:
         if not names:
+            logger.debug(f'PROCESSING {repo.name}: NO NAMES LIST')                    
             yield repo
         else:
             for name in names:
