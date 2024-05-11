@@ -20,10 +20,12 @@ if __name__ == '__main__':
     args = options.parse()
     logger = output.setup_logger(level=args.loglevel.upper())
     output.print_args(args, logger.debug)
+
     for repo in filters.grep(repos.scan(BASE_DIR, has_remote=True), args.grep):
         try:
             logger.debug(f'fetching {repo.remote}')
             git.fetch(repo)
+            
             logger.debug(f'getting status for {repo.path}')
             status = git.get_status(repo)
 

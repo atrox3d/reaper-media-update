@@ -15,7 +15,15 @@ def parse():
     parser.add_argument('-l', '--listrepos', action='store_true', default=False)
     parser.add_argument('-f', '--filter', nargs='+', default=[],
                         choices='dirty push pull unclean'.split())
-    parser.add_argument('-g', '--grep', action='append', default=[])
+    # parser.add_argument('-g', '--grep', action='append', default=[])
+    parser.add_argument('-g', '--grep',
+                        # dest='array',
+                        action='extend',
+                        nargs='+',
+                        type=str,
+                        default=[]
+                        )
+
     # parser.add_argument_group
     args = parser.parse_args()
     return args
