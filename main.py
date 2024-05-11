@@ -1,6 +1,6 @@
 from pathlib import Path
 import os
-# import argparse
+import argparse
 # import logging
 
 import log
@@ -17,7 +17,29 @@ JSON_PATH = SCRIPT_DIR / 'projects.json'
 os.chdir(SCRIPT_DIR)
 BASE_DIR = '..'
 
-# repos.backup(BASE_DIR, json_path=JSON_PATH, recurse=True)
+def meet_args_conditions(repo: git.GitRepo, status: git.GitStatus, args: argparse.Namespace) -> bool:
+    if args.skipclean and filters.isclean(status):
+        logger.debug(f'skipping clean repo: {repo.path}')
+        return False
+    
+    if 'unclean' in args.filter and filters.isclean(status):
+        logger.debug(f'skipping clean repo: {repo.path}')
+        return False
+    
+    if 'dirty' in args.filter and not status.dirty:
+        logger.debug(f'skipping non-dirty repo: {repo.path}')
+        return False
+    
+    if 'pull' in args.filter and not status.need_pull:
+        logger.debug(f'skipping non-pull repo: {repo.path}')
+        return False
+    
+    if 'push' in args.filter and not status.need_push:
+        logger.debug(f'skipping non-push repo: {repo.path}')
+        return False
+    
+    return True
+
 
 if __name__ == '__main__':
     args = options.parse()
@@ -32,20 +54,7 @@ if __name__ == '__main__':
             logger.debug(f'getting status for {repo.path}')
             status = git.get_status(repo)
 
-            if args.skipclean and filters.isclean(status):
-                logger.debug(f'skipping clean repo: {repo.path}')
-                continue
-            if 'unclean' in args.filter and filters.isclean(status):
-                logger.debug(f'skipping clean repo: {repo.path}')
-                continue
-            if 'dirty' in args.filter and not status.dirty:
-                logger.debug(f'skipping non-dirty repo: {repo.path}')
-                continue
-            if 'pull' in args.filter and not status.need_pull:
-                logger.debug(f'skipping non-pull repo: {repo.path}')
-                continue
-            if 'push' in args.filter and not status.need_push:
-                logger.debug(f'skipping non-push repo: {repo.path}')
+            if not meet_args_conditions(repo, status, args):
                 continue
 
             if args.listrepos:
