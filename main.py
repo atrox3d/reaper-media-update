@@ -37,11 +37,11 @@ def printinfo(repo:git.GitRepo, status:git.GitStatus, print=print):
         print('STATUS | PUSH needed')
     if status.dirty:
         print('STATUS | DIRTY')
-        print_files('ADDED    ', status.added)
-        print_files('UNTRACKED', status.untracked)
-        print_files('MODIFIED ', status.modified)
-        print_files('DELETED  ', status.deleted)
-        print_files('RENAMED  ', status.renamed, renamed=True)
+        print_files('ADDED    ', status.added, print=print)
+        print_files('UNTRACKED', status.untracked, print=print)
+        print_files('MODIFIED ', status.modified, print=print)
+        print_files('DELETED  ', status.deleted, print=print)
+        print_files('RENAMED  ', status.renamed, renamed=True, print=print)
 
 def parse():
     parser = argparse.ArgumentParser()
@@ -55,6 +55,7 @@ def parse():
     parser.add_argument('-l', '--listrepos', action='store_true', default=False)
     parser.add_argument('-f', '--filter', nargs='+', default=[],
                         choices='dirty push pull unclean'.split())
+    parser.add_argument('-g', '--grep', action='append', default=[])
     parser.add_argument_group
     args = parser.parse_args()
     return args
@@ -84,13 +85,22 @@ def setup_logger(
 def print_args(args: argparse.Namespace, print=print) -> None:
     for arg, value in vars(args).items():
         print(f'{arg} = {value}')
-    
+
+def grep(repos: list[git.GitRepo], names: list):
+    for repo in repos:
+        if not names:
+            yield repo
+        else:
+            for name in names:
+                if name in repo.name:
+                    yield repo
+                    break
+
 if __name__ == '__main__':
     args = parse()
     logger = setup_logger(level=args.loglevel.upper())
     print_args(args, logger.debug)
-
-    for repo in repos.scan(BASE_DIR, has_remote=True):
+    for repo in grep(repos.scan(BASE_DIR, has_remote=True), args.grep):
         try:
             logger.debug(f'fetching {repo.remote}')
             git.fetch(repo)
@@ -119,7 +129,7 @@ if __name__ == '__main__':
                 continue
             
             printheader(repo, print=logger.info)
-            printinfo(repo, status, logger.info)
+            printinfo(repo, status, print=logger.info)
 
             if args.pull:
                 logger.info(f'PULL')
