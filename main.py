@@ -1,7 +1,10 @@
 from pathlib import Path
 import os
-import argparse
-import logging
+# import argparse
+# import logging
+
+import log
+log.setup_logging() # setup logging before imports
 
 from atrox3d.simplegit import git, repos
 import filters
@@ -18,7 +21,7 @@ BASE_DIR = '..'
 
 if __name__ == '__main__':
     args = options.parse()
-    logger = output.setup_logger(level=args.loglevel.upper())
+    logger = log.get_logger(level=args.loglevel.upper())
     output.print_args(args, logger.debug)
 
     for repo in filters.grep(repos.scan(BASE_DIR, has_remote=True), args.grep):

@@ -35,21 +35,6 @@ def printinfo(repo:git.GitRepo, status:git.GitStatus, print=print):
         print_files('DELETED  ', status.deleted, print=print)
         print_files('RENAMED  ', status.renamed, renamed=True, print=print)
 
-def setup_logger(
-                    level: int|str =logging.INFO,
-                    root_level: int|str =logging.INFO,
-                    format: str='%(levelname)5s | %(message)s'
-                ) -> logging.Logger:
-    LOGFILE = str(Path(__file__).parent / Path(__file__).stem) + '.log'
-    handlers = [
-        logging.FileHandler(LOGFILE, mode='w'),
-        logging.StreamHandler()
-    ]
-    logging.basicConfig(level=root_level, format=format, handlers=handlers)
-    logger = logging.getLogger(__name__)
-    logger.setLevel(level)
-    return logger
-
 def print_args(args: argparse.Namespace, print=print) -> None:
     for arg, value in vars(args).items():
         print(f'{arg} = {value}')
