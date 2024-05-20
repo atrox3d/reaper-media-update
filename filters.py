@@ -1,39 +1,55 @@
+import argparse
+import types
+# from functools import partial
+
+import filters
 import log
 logger = log.get_logger(__name__)
 
 from atrox3d.simplegit import git
 
-def isclean(status:git.GitStatus) -> bool:
+def is_clean(status:git.GitStatus) -> bool:
     return not any([
                 status.dirty,
                 status.need_pull,
                 status.need_push,
             ])
 
-def grep(repos: list[git.GitRepo], names: list):
-    for repo in repos:
-        if not names:
-            logger.debug(f'PROCESSING {repo.name}: NO NAMES LIST')                    
-            yield repo
-        else:
-            for name in names:
-                if name in repo.name:
-                    logger.debug(f'PROCESSING {repo.name}: in name list: {names}')                    
-                    yield repo
-                    break
-                else:
-                    logger.debug(f'SKIPPING {repo.name}: not in name list: {names}')
+def matches_substring(target: str, substrings: list[str]) -> bool:
+    for substring in substrings:
+        if substring in target:
+            return True
+    return False
 
-def exclude(repos: list[git.GitRepo], names: list):
-    for repo in repos:
-        if not names:
-            logger.debug(f'PROCESSING {repo.name}: NO NAMES LIST')                    
-            yield repo
-        else:
-            for name in names:
-                if name not in repo.name:
-                    logger.debug(f'PROCESSING {repo.name}: in name list: {names}')                    
-                    yield repo
-                    break
-                else:
-                    logger.debug(f'EXCLUDING {repo.name}: not in name list: {names}')
+def is_processable(name, include, exclude):
+    if include:
+        if not matches_substring(name, include):
+            return False
+    if exclude:
+        if  matches_substring(name, exclude):
+            return False
+    return True
+
+
+def meet_args_conditions(repo: git.GitRepo, status: git.GitStatus, args: argparse.Namespace) -> bool:
+    if args.skipclean and filters.is_clean(status):
+        logger.info(f'skipping clean repo: {repo.path}')
+        return False
+
+    if 'unclean' in args.filter and filters.is_clean(status):
+        logger.info(f'skipping clean repo: {repo.path}')
+        return False
+
+    if 'dirty' in args.filter and not status.dirty:
+        logger.info(f'skipping non-dirty repo: {repo.path}')
+        return False
+
+    if 'pull' in args.filter and not status.need_pull:
+        logger.info(f'skipping non-pull repo: {repo.path}')
+        return False
+
+    if 'push' in args.filter and not status.need_push:
+        logger.info(f'skipping non-push repo: {repo.path}')
+        return False
+
+    return True
