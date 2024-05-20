@@ -3,10 +3,12 @@ import os
 import argparse
 # import logging
 
-import log
-log.setup_logging() # setup logging before imports
+# import log
+# log.setup_logging() # setup logging before imports
 
 from atrox3d.simplegit import git, repos
+from atrox3d.logger import logmanager as log, modulelogging as mlog
+# from atrox3d.logging import logmanager
 import filters
 import options
 import output
@@ -43,11 +45,14 @@ def meet_args_conditions(repo: git.GitRepo, status: git.GitStatus, args: argpars
 
 if __name__ == '__main__':
     args = options.parse()
+    log.setup_logging(caller_path=__file__)
     logger = log.get_logger(__name__, level=args.loglevel.upper())
-    filters.logger.setLevel(args.loglevel.upper())
-    output.print_args(args, logger.debug)
-
-    for repo in filters.grep(repos.scan(BASE_DIR, has_remote=True), args.grep):
+    mlog.set_module_loggers_level(filters, args.loglevel.upper())
+    output.print_args(args, logger.info)
+    if args.print_options_and_exit:
+        exit()
+    
+    for repo in filters.exclude(filters.grep(repos.scan(BASE_DIR, has_remote=True), args.grep), args.exclude):
         try:
             logger.debug(f'fetching {repo.remote}')
             git.fetch(repo)
@@ -71,14 +76,14 @@ if __name__ == '__main__':
                 git.pull(repo)
             
             if status.dirty:
-                if args.addall or args.all:
+                if args.addall or args.add_commit_push:
                     logger.info(f'ADDING | all files')
                     git.add(repo, all=True)
-                if args.commit or args.all:
+                if args.commit or args.add_commit_push:
                     logger.info(f'COMMIT | {args.commit or "AUTOMATIC COMMIT"}')
                     git.commit(repo, args.commit or 'AUTOMATIC COMMIT', add_all=args.all)
 
-            if args.push or args.all:
+            if args.push or args.add_commit_push:
                 logger.info(f'PUSH')
                 git.push(repo)
             # printfooter()
