@@ -29,7 +29,14 @@ if __name__ == '__main__':
         if not filters.is_processable(repo.name, args.grep, args.exclude):
             logger.info(f'filtering out {repo.name}')
             continue
+
+        if args.listrepos:
+            logger.debug(f'listing only repo: {repo.path}')
+            logger.info('/'.join(repo.get_path().parts[-2:]))
+            continue
+
         try:
+
             logger.debug(f'fetching {repo.remote}')
             git.fetch(repo)
             
@@ -37,11 +44,6 @@ if __name__ == '__main__':
             status = git.get_status(repo)
 
             if not filters.meet_args_conditions(repo, status, args):
-                continue
-
-            if args.listrepos:
-                logger.debug(f'listing only repo: {repo.path}')
-                logger.info('/'.join(repo.get_path().parts[-2:]))
                 continue
             
             output.printheader(repo, status, print=logger.info)
