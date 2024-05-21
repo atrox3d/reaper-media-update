@@ -21,13 +21,14 @@ if __name__ == '__main__':
     modulelogging.set_module_loggers_level(filters, args.loglevel.upper())
     logger = logmanager.get_logger(__name__, level=args.loglevel.upper())
 
-    output.print_args(args, logger.info)
     if args.print_options_and_exit:
+        output.print_args(args, logger.info)
         exit()
     
     for repo in repos.scan(BASE_DIR, has_remote=True):
+
         if not filters.is_processable(repo.name, args.grep, args.exclude):
-            logger.info(f'filtering out {repo.name}')
+            logger.debug(f'filtering out {repo.name}')
             continue
 
         if args.listrepos:
@@ -53,17 +54,19 @@ if __name__ == '__main__':
                 logger.info(f'PULL')
                 git.pull(repo)
             
-            if status.dirty:
-                if args.addall or args.add_commit_push:
-                    logger.info(f'ADDING | all files')
-                    git.add(repo, all=True)
-                if args.commit or args.add_commit_push:
-                    logger.info(f'COMMIT | {args.commit or "AUTOMATIC COMMIT"}')
-                    git.commit(repo, args.commit or 'AUTOMATIC COMMIT', add_all=args.all)
+            # if status.dirty:
+            if args.addall or args.add_commit_push:
+                logger.info(f'ADDING | all files')
+                git.add(repo, all=True)
+
+            if args.commit or args.add_commit_push:
+                logger.info(f'COMMIT | {args.commit or "AUTOMATIC COMMIT"}')
+                git.commit(repo, args.commit or 'AUTOMATIC COMMIT', add_all=args.add_commit_push)
 
             if args.push or args.add_commit_push:
                 logger.info(f'PUSH')
                 git.push(repo)
+
             # printfooter()
         except git.GitException as ge:
             ge.print(printer=logger.error)

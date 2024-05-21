@@ -23,6 +23,8 @@ def print_files(tag:str, files:list, renamed=False, print=print):
 
 def printinfo(repo:git.GitRepo, status:git.GitStatus, print=print):
     # print(f'{status.branch}: {status.remote_branch}')
+    if status.need_pull or status.need_push or status.dirty:
+        printfooter(print)
     if status.need_pull:
         print('STATUS | PULL needed')
     if status.need_push:

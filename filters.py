@@ -33,23 +33,23 @@ def is_processable(name, include, exclude):
 
 def meet_args_conditions(repo: git.GitRepo, status: git.GitStatus, args: argparse.Namespace) -> bool:
     if args.skipclean and filters.is_clean(status):
-        logger.info(f'skipping clean repo: {repo.path}')
+        logger.debug(f'skipping clean repo: {repo.path}')
         return False
 
     if 'unclean' in args.filter and filters.is_clean(status):
-        logger.info(f'skipping clean repo: {repo.path}')
+        logger.debug(f'skipping clean repo: {repo.path}')
         return False
 
     if 'dirty' in args.filter and not status.dirty:
-        logger.info(f'skipping non-dirty repo: {repo.path}')
+        logger.debug(f'skipping non-dirty repo: {repo.path}')
         return False
 
     if 'pull' in args.filter and not status.need_pull:
-        logger.info(f'skipping non-pull repo: {repo.path}')
+        logger.debug(f'skipping non-pull repo: {repo.path}')
         return False
 
     if 'push' in args.filter and not status.need_push:
-        logger.info(f'skipping non-push repo: {repo.path}')
+        logger.debug(f'skipping non-push repo: {repo.path}')
         return False
 
     return True
