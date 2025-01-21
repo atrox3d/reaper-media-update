@@ -6,10 +6,11 @@
 echo "${0}"
 HERE="$(dirname ${0})"
 echo "HERE=${HERE}"
+#exit
 # cd "$HERE"
 # ls
 # exit
-cd "${HERE}/.."
+#cd "${HERE}/.."
 . "${HERE}/loader.include"
 
 logger_setlevel INFO
