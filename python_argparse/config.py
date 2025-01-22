@@ -6,7 +6,7 @@ from pathlib import Path
 
 # DEFAULT_JSON_PATH = f'{os.getcwd()}/config.json'
 SECRETS_PATH = Path(__file__).parent / '.secrets'
-DEFAULT_JSON_PATH = SECRETS_PATH / '.secrets'
+DEFAULT_JSON_PATH = SECRETS_PATH / 'config.json'
 
 
 def _load(jsonpath:str) -> dict:
