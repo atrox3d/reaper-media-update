@@ -35,7 +35,7 @@ class Config:
 class AutoConfig:
 
     @classmethod
-    def from_json(cls, jsonpath=DEFAULT_JSON_PATH) -> 'AutoConfig':
+    def load(cls, jsonpath=DEFAULT_JSON_PATH) -> 'AutoConfig':
         config = _load(jsonpath)
         autoconfig = cls()
         for k, v in config.items():
@@ -43,6 +43,9 @@ class AutoConfig:
         return autoconfig
     
     
-    def to_json(self, jsonpath=DEFAULT_JSON_PATH):
-        config = vars(self)
-        _save(config, jsonpath)
+    def save(self, jsonpath=DEFAULT_JSON_PATH):
+        _save(self.asdict(), jsonpath)
+    
+    
+    def asdict(self) -> dict:
+        return vars(self)
