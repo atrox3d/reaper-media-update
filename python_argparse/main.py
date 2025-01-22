@@ -43,7 +43,6 @@ if __name__ == '__main__':
             if not filters.meet_args_conditions(repo, status, args):
                 continue
 
-            args.listrepos =  True
             if args.listrepos:
                 logger.debug(f'listing only repo: {repo.path}')
                 repo_path = '/'.join(repo.get_path().parts[-2:])

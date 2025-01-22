@@ -2,7 +2,6 @@ import argparse
 import types
 # from functools import partial
 
-import filters
 import log
 logger = log.get_logger(__name__)
 
@@ -32,11 +31,11 @@ def is_processable(name, include, exclude):
 
 
 def meet_args_conditions(repo: git.GitRepo, status: git.GitStatus, args: argparse.Namespace) -> bool:
-    if args.skipclean and filters.is_clean(status):
+    if args.skipclean and is_clean(status):
         logger.debug(f'skipping clean repo: {repo.path}')
         return False
 
-    if 'unclean' in args.filter and filters.is_clean(status):
+    if 'unclean' in args.filter and is_clean(status):
         logger.debug(f'skipping clean repo: {repo.path}')
         return False
 
