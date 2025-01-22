@@ -15,19 +15,15 @@ defaults = config.AutoConfig(
     JSON_FILENAME = 'projects.json',
     PROJECTS_DIR = '../..',
 )
-defaults.PROJECTS_JSON_PATH = defaults.SCRIPT_DIR / defaults.JSON_FILENAME,
-print(defaults.SCRIPT_DIR)
-print(defaults.JSON_FILENAME)
-print(defaults.PROJECTS_JSON_PATH)
-exit()
+defaults.PROJECTS_JSON_PATH = defaults.SCRIPT_DIR / defaults.JSON_FILENAME
 
-
-
-
-
-cfg = config.AutoConfig.load()
-cfg.update(defaults.asdict())
-cfg.save()
+try:
+    cfg = config.AutoConfig.load()
+    cfg.update(defaults.asdict())
+    cfg.save()
+except FileNotFoundError:
+    cfg = defaults
+    pass
 
 os.chdir(cfg.SCRIPT_DIR)
 
@@ -61,9 +57,7 @@ if __name__ == '__main__':
 
             if args.listrepos:
                 logger.debug(f'listing only repo: {repo.path}')
-                repo_path = '/'.join(repo.get_path().parts[-2:])
-                summary = ', '.join([k.upper() for k, v in vars(status).items() if k in ['dirty', 'need_push', 'need_pull'] and v is True])
-                logger.info(f'{repo_path:50} {summary}')
+                output.printsummary(repo, status, print=logger.info)
                 continue
             
             output.printheader(repo, status, print=logger.info)
@@ -87,5 +81,10 @@ if __name__ == '__main__':
                 git.push(repo)
 
             # printfooter()
+        except git.GitFetchException as gfe:
+            gfe.print(printer=logger.error)
+            logger.error('cannot reach github, terminating')
+            exit()
+        
         except git.GitException as ge:
             ge.print(printer=logger.error)

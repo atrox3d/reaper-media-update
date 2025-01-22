@@ -40,6 +40,14 @@ def printinfo(repo:git.GitRepo, status:git.GitStatus, print=print):
         print_files('DELETED  ', status.deleted, print=print)
         print_files('RENAMED  ', status.renamed, renamed=True, print=print)
 
+
+def printsummary(repo:git.GitRepo, status:git.GitStatus, print=print):
+        repo_path = '/'.join(repo.get_path().parts[-2:])
+        summary = ', '.join([k.upper() for k, v in vars(status).items() if k in ['dirty', 'need_push', 'need_pull'] and v is True])
+        summary = summary if summary else 'OK'
+        print(f'{repo_path:50} {summary}')
+
+
 def print_args(args: argparse.Namespace, print=print) -> None:
     for arg, value in vars(args).items():
         print(f'{arg} = {value}')
