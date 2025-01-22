@@ -11,8 +11,10 @@ def printheader(repo:git.GitRepo, status:git.GitStatus, width=80, print=print):
     branch = f'{status.branch}: {status.remote_branch}'
     print(f'{path}{branch:>{width-len(path)}}')
 
+
 def printfooter(print=print):
     print('-' * 80)
+
 
 def print_files(tag:str, files:list, renamed=False, print=print):
         for file in files:
@@ -20,6 +22,7 @@ def print_files(tag:str, files:list, renamed=False, print=print):
                 print(f'STATUS | {tag} | {file[0]!r} -> {file[0]!r}')
             else:
                 print(f'STATUS | {tag} | {file}')
+
 
 def printinfo(repo:git.GitRepo, status:git.GitStatus, print=print):
     # print(f'{status.branch}: {status.remote_branch}')
