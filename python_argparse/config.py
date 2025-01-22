@@ -7,16 +7,16 @@ from pathlib import Path
 # DEFAULT_JSON_PATH = f'{os.getcwd()}/config.json'
 SECRETS_PATH = Path(__file__).parent / '.secrets'
 DEFAULT_JSON_PATH = SECRETS_PATH / 'config.json'
-
+INDENT = 4
 
 def _load(jsonpath:str) -> dict:
         with open(jsonpath, 'r') as fp:
             return json.load(fp)
 
 
-def _save(data:dict, jsonpath:str) -> dict:
+def _save(data:dict, jsonpath:str, indent=INDENT) -> dict:
         with open(jsonpath, 'w') as fp:
-            return json.dump(data, fp)
+            return json.dump(data, fp, indent=indent)
 
 
 @dataclass
@@ -45,12 +45,17 @@ class AutoConfig:
             setattr(self, k, v)
     
     
+    def update(self, d:dict):
+        self.set(**d)
+    
+    
     def __init__(self, **kwargs):
         self.set(**kwargs)
     
     
-    def save(self, jsonpath=DEFAULT_JSON_PATH):
-        _save(self.asdict(), jsonpath)
+    def save(self, jsonpath=DEFAULT_JSON_PATH, indent=INDENT):
+        out = {k: str(v) for k, v in self.asdict().items()}
+        _save(out, jsonpath, indent)
     
     
     def asdict(self) -> dict:
