@@ -2,12 +2,13 @@ import argparse
 
 def parse():
     parser = argparse.ArgumentParser()
+    
     # output
     parser.add_argument('-L', '--loglevel', default='INFO',
                         help='sets log level, default info')
     parser.add_argument('-o', '--print-options-and-exit', action='store_true', default=False,
                         help='prints options and exit')
-
+    
     # actions
     parser.add_argument('-c', '--commit', default=None,
                         help='commits with the provided message')
@@ -32,7 +33,7 @@ def parse():
                         help='include only repos containig one of the strings')
     parser.add_argument('-e', '--exclude', action='extend', nargs='+', type=str, default=[],
                         help='exclude repos containig one of the strings')
-
+    
     args = parser.parse_args()
     return args
 

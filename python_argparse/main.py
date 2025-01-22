@@ -8,11 +8,12 @@ import filters
 import options
 import output
 
+
 SCRIPT_DIR = Path(__file__).parent
 JSON_PATH = SCRIPT_DIR / 'projects.json'
 
 os.chdir(SCRIPT_DIR)
-BASE_DIR = '..'
+BASE_DIR = '../..'
 
 if __name__ == '__main__':
     args = options.parse()
