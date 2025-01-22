@@ -14,7 +14,12 @@ def _load(jsonpath:str) -> dict:
             return json.load(fp)
 
 
+def _makepath(jsonpath:str):
+    Path(jsonpath).parent.mkdir(exist_ok=True)
+
+
 def _save(data:dict, jsonpath:str, indent=INDENT) -> dict:
+        _makepath(jsonpath)
         with open(jsonpath, 'w') as fp:
             return json.dump(data, fp, indent=indent)
 
@@ -49,7 +54,10 @@ class AutoConfig:
         self.set(**d)
     
     
-    def __init__(self, **kwargs):
+    def __init__(self, *, source:'AutoConfig'=None ,**kwargs):
+        if source is not None:
+            self.set(**source.asdict())
+        
         self.set(**kwargs)
     
     

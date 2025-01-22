@@ -20,10 +20,11 @@ defaults.PROJECTS_JSON_PATH = defaults.SCRIPT_DIR / defaults.JSON_FILENAME
 try:
     cfg = config.AutoConfig.load()
     cfg.update(defaults.asdict())
-    cfg.save()
 except FileNotFoundError:
-    cfg = defaults
+    cfg = config.AutoConfig(source=defaults)
     pass
+finally:
+    cfg.save()
 
 os.chdir(cfg.SCRIPT_DIR)
 
