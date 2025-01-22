@@ -10,10 +10,11 @@ import output
 
 
 SCRIPT_DIR = Path(__file__).parent
-JSON_PATH = SCRIPT_DIR / 'projects.json'
+JSON_FILENAME = 'projects.json'
+PROJECTS_JSON_PATH = SCRIPT_DIR / JSON_FILENAME
+PROJECTS_DIR = '../..'
 
 os.chdir(SCRIPT_DIR)
-BASE_DIR = '../..'
 
 if __name__ == '__main__':
     args = options.parse()
@@ -26,7 +27,7 @@ if __name__ == '__main__':
         output.print_args(args, logger.info)
         exit()
     
-    for repo in repos.scan(BASE_DIR, has_remote=True):
+    for repo in repos.scan(PROJECTS_DIR, has_remote=True):
 
         if not filters.is_processable(repo.name, args.grep, args.exclude):
             logger.debug(f'filtering out {repo.name}')
