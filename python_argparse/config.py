@@ -37,10 +37,16 @@ class AutoConfig:
     @classmethod
     def load(cls, jsonpath=DEFAULT_JSON_PATH) -> 'AutoConfig':
         config = _load(jsonpath)
-        autoconfig = cls()
-        for k, v in config.items():
-            setattr(autoconfig, k, v)
-        return autoconfig
+        return cls(**config)
+    
+    
+    def set(self, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+    
+    
+    def __init__(self, **kwargs):
+        self.set(**kwargs)
     
     
     def save(self, jsonpath=DEFAULT_JSON_PATH):

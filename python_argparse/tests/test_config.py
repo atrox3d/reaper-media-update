@@ -26,6 +26,19 @@ def test_defaults():
     assert config.DEFAULT_JSON_PATH == (Path(__file__).parent.parent / '.secrets/config.json')
 
 
+def test_init():
+    ac = config.AutoConfig(x=5)
+    assert ac.asdict() == {'x': 5}
+
+
+def test_init_set():
+    ac = config.AutoConfig(x=5)
+    assert ac.asdict() == {'x': 5}
+    
+    ac.set(y=10)
+    assert ac.asdict() == {'x': 5, 'y': 10}
+
+
 def test_save(tempjsonpath):
     ac = config.AutoConfig()
     ac.x = 5
