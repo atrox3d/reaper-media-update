@@ -9,6 +9,7 @@ SECRETS_PATH = Path(__file__).parent / '.secrets'
 DEFAULT_JSON_PATH = SECRETS_PATH / 'config.json'
 INDENT = 4
 
+
 def _load(jsonpath:str) -> dict:
         with open(jsonpath, 'r') as fp:
             return json.load(fp)
@@ -24,25 +25,18 @@ def _save(data:dict, jsonpath:str, indent=INDENT) -> dict:
             return json.dump(data, fp, indent=indent)
 
 
-@dataclass
-class Config:
-
-    template_path: str
-    year_format: str
-    day_format: str
-
-    @classmethod
-    def from_json(cls, jsonpath=DEFAULT_JSON_PATH):
-        config = _load(jsonpath)
-        return cls(**config)
-
-
 class AutoConfig:
 
     @classmethod
-    def load(cls, jsonpath=DEFAULT_JSON_PATH) -> 'AutoConfig':
+    def fromjson(cls, jsonpath=DEFAULT_JSON_PATH) -> 'AutoConfig':
         config = _load(jsonpath)
         return cls(**config)
+    
+    
+    def __init__(self, *, source:'AutoConfig'=None ,**kwargs):
+        if source is not None:
+            self.set(**source.asdict())
+        self.set(**kwargs)
     
     
     def set(self, **kwargs):
@@ -50,15 +44,13 @@ class AutoConfig:
             setattr(self, k, v)
     
     
-    def update(self, d:dict):
-        self.set(**d)
+    def update(self, fromdict:dict):
+        self.set(**fromdict)
     
     
-    def __init__(self, *, source:'AutoConfig'=None ,**kwargs):
-        if source is not None:
-            self.set(**source.asdict())
-        
-        self.set(**kwargs)
+    def update_fromjson(self, jsonpath:str=DEFAULT_JSON_PATH):
+        config = _load(jsonpath)
+        self.update(config)
     
     
     def save(self, jsonpath=DEFAULT_JSON_PATH, indent=INDENT):

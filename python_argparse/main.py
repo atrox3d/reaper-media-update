@@ -10,21 +10,23 @@ import output
 import config
 
 
-defaults = config.AutoConfig(
+cfg = config.AutoConfig(
     SCRIPT_DIR = Path(__file__).parent,
     JSON_FILENAME = 'projects.json',
     PROJECTS_DIR = '../..',
 )
-defaults.PROJECTS_JSON_PATH = defaults.SCRIPT_DIR / defaults.JSON_FILENAME
+cfg.PROJECTS_JSON_PATH = cfg.SCRIPT_DIR / cfg.JSON_FILENAME
+cfg.update_fromjson()
+cfg.save()
+# try:
+#     cfg = config.AutoConfig.fromjson()
+#     cfg.update(defaults.asdict())
+# except FileNotFoundError:
+#     cfg = config.AutoConfig(source=defaults)
+#     pass
+# finally:
+#     cfg.save()
 
-try:
-    cfg = config.AutoConfig.load()
-    cfg.update(defaults.asdict())
-except FileNotFoundError:
-    cfg = config.AutoConfig(source=defaults)
-    pass
-finally:
-    cfg.save()
 
 os.chdir(cfg.SCRIPT_DIR)
 

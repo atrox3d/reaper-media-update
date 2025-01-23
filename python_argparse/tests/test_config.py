@@ -53,7 +53,7 @@ def test_load(tempjsonpath):
     with open(tempjsonpath, 'w') as fp:
         json.dump(data, fp)
     
-    ac = config.AutoConfig.load(tempjsonpath)
+    ac = config.AutoConfig.fromjson(tempjsonpath)
     assert list(ac.asdict().keys()) == ['x']
     assert ac.x == 5
     assert ac.asdict() == data
