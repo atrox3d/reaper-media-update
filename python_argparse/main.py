@@ -47,9 +47,10 @@ if __name__ == '__main__':
 
             if args.listrepos:
                 logger.debug(f'listing only repo: {repo.path}')
-                repo_path = '/'.join(repo.get_path().parts[-2:])
-                summary = ', '.join([k.upper() for k, v in vars(status).items() if k in ['dirty', 'need_push', 'need_pull'] and v is True])
-                logger.info(f'{repo_path:50} {summary}')
+                # repo_path = '/'.join(repo.get_path().parts[-2:])
+                # summary = ', '.join([k.upper() for k, v in vars(status).items() if k in ['dirty', 'need_push', 'need_pull'] and v is True])
+                # logger.info(f'{repo_path:50} {summary}')
+                output.printsummary(repo, status, logger.info)
                 continue
             
             output.printheader(repo, status, print=logger.info)
