@@ -26,11 +26,20 @@ def test_defaults():
     assert config.DEFAULT_JSON_PATH == (Path(__file__).parent.parent / '.secrets/config.json')
 
 
+def test_from_json(tempjsonpath):
+    data = {'x': 5}
+    with open(tempjsonpath, 'w') as fp:
+        json.dump(data, fp)
+    
+    ac = config.JsonConfig.from_json(tempjsonpath)
+    assert ac['x'] == 5
+
+
 def test_save(tempjsonpath):
     ac = config.JsonConfig()
     ac['x'] = 5
     
-    ac.to_json(tempjsonpath)
+    ac.save(tempjsonpath)
     with open(tempjsonpath, 'r') as fp:
         assert json.load(fp) == {'x': 5}
 
@@ -40,7 +49,7 @@ def test_load(tempjsonpath):
     with open(tempjsonpath, 'w') as fp:
         json.dump(data, fp)
     
-    ac = config.JsonConfig.from_json(tempjsonpath)
+    ac = config.JsonConfig().load(tempjsonpath)
     assert ac['x'] == 5
 
 

@@ -42,5 +42,12 @@ class JsonConfig(dict):
         return config
     
     
-    def to_json(self, jsonpath=DEFAULT_JSON_PATH):
+    def load(self, jsonpath=DEFAULT_JSON_PATH):
+        data = _load(jsonpath)
+        self.update(data)
+        return self
+    
+    
+    def save(self, jsonpath=DEFAULT_JSON_PATH):
         _save(self, jsonpath)
+        return self
