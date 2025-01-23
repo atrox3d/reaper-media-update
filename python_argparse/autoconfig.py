@@ -18,16 +18,16 @@ def _save(data:dict, jsonpath:str) -> dict:
         with open(jsonpath, 'w') as fp:
             return json.dump(data, fp)
 
-from typing import TypeVar, Type
+from typing import TypeVar, Type, Self
 
 # Create a generic variable that can be 'Parent', or any subclass.
-T = TypeVar('T', bound='AutoConfig')
+# T = TypeVar('T', bound='AutoConfig')
 
 @dataclass
 class AutoConfig:
 
     @classmethod
-    def from_json(cls:Type[T], jsonpath=DEFAULT_JSON_PATH) -> T:
+    def from_json(cls:Type[Self], jsonpath=DEFAULT_JSON_PATH) -> Self:
         config = _load(jsonpath)
         return cls(**config)
     
