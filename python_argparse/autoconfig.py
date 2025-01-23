@@ -23,6 +23,9 @@ from typing import TypeVar, Type, Self
 # Create a generic variable that can be 'Parent', or any subclass.
 # T = TypeVar('T', bound='AutoConfig')
 
+# https://stackoverflow.com/a/76663588
+# Python version >= 3.11: Starting with Python 3.11, you can now use typing.Self to avoid declaring a TypeVar. 
+# It can be used with @classmethod, as specified in PEP 673:
 @dataclass
 class AutoConfig:
 
