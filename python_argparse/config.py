@@ -20,18 +20,6 @@ def _save(data:dict, jsonpath:str) -> dict:
 
 
 @dataclass
-class Config:
-
-    template_path: str
-    year_format: str
-    day_format: str
-
-    @classmethod
-    def from_json(cls, jsonpath=DEFAULT_JSON_PATH):
-        config = _load(jsonpath)
-        return cls(**config)
-
-
 class AutoConfig:
 
     @classmethod
@@ -39,7 +27,10 @@ class AutoConfig:
         config = _load(jsonpath)
         autoconfig = cls()
         for k, v in config.items():
-            setattr(autoconfig, k, v)
+            if hasattr(autoconfig, k):
+                setattr(autoconfig, k, v)
+            else:
+                raise AttributeError(k)
         return autoconfig
     
     
