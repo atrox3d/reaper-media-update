@@ -27,8 +27,8 @@ def test_defaults():
 
 
 def test_save(tempjsonpath):
-    ac = config.AutoConfig()
-    ac.x = 5
+    ac = config.JsonConfig()
+    ac['x'] = 5
     
     ac.to_json(tempjsonpath)
     with open(tempjsonpath, 'r') as fp:
@@ -40,7 +40,7 @@ def test_load(tempjsonpath):
     with open(tempjsonpath, 'w') as fp:
         json.dump(data, fp)
     
-    ac = config.AutoConfig.from_json(tempjsonpath)
-    assert ac.x == 5
+    ac = config.JsonConfig.from_json(tempjsonpath)
+    assert ac['x'] == 5
 
 
