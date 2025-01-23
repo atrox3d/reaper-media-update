@@ -12,10 +12,9 @@ from config import JsonConfig
 SCRIPT_DIR = Path(__file__).parent
 # JSON_PATH = SCRIPT_DIR / 'projects.json'
 # BASE_DIR = '../..'
-config = JsonConfig().load()
 
-
-if __name__ == '__main__':
+def main():
+    config = JsonConfig().load()
     os.chdir(SCRIPT_DIR)
     
     args = options.parse()
@@ -76,3 +75,7 @@ if __name__ == '__main__':
             # printfooter()
         except git.GitException as ge:
             ge.print(printer=logger.error)
+
+
+if __name__ == '__main__':
+    main()
