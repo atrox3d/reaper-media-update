@@ -5,7 +5,8 @@ import pytest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-import config
+
+import autoconfig   # !!! pytest.ini: pythonpath = python_argparse
 
 
 @pytest.fixture
@@ -45,7 +46,7 @@ def tempjson(tempjsonpath, tempdata):
 
 
 @dataclass
-class Config(config.AutoConfig):
+class Config(autoconfig.AutoConfig):
     attr: str = None
 
 
@@ -55,22 +56,22 @@ def TestConfig() -> type[Config]:
 
 
 def test_defaults():
-    assert config.SECRETS_PATH == (Path(__file__).parent.parent / '.secrets')
-    assert config.DEFAULT_JSON_PATH == (Path(__file__).parent.parent / '.secrets/config.json')
+    assert autoconfig.SECRETS_PATH == (Path(__file__).parent.parent / '.secrets')
+    assert autoconfig.DEFAULT_JSON_PATH == (Path(__file__).parent.parent / '.secrets/config.json')
 
 
 def test_from_json_attribute_error(tempjson):
-    with pytest.raises(AttributeError):
-        ac = config.AutoConfig.from_json(tempjson)
+    with pytest.raises(TypeError):
+        ac = autoconfig.AutoConfig.from_json(tempjson)
 
 
 def test_from_json(tempjson, TestConfig, testvalue):
-    ac: 'Config' = TestConfig.from_json(tempjson)
+    ac = TestConfig.from_json(tempjson)
     assert ac.attr == testvalue
 
 
 def test_to_json(tempjsonpath):
-    ac = config.AutoConfig()
+    ac = autoconfig.AutoConfig()
     ac.x = 5
     
     ac.to_json(tempjsonpath)
@@ -83,7 +84,7 @@ def _test_load(tempjsonpath):
     with open(tempjsonpath, 'w') as fp:
         json.dump(data, fp)
     
-    ac = config.AutoConfig.from_json(tempjsonpath)
+    ac = autoconfig.AutoConfig.from_json(tempjsonpath)
     assert ac.x == 5
 
 
