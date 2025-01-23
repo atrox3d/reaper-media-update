@@ -7,15 +7,17 @@ from atrox3d.logger import logmanager, modulelogging
 import filters
 import options
 import output
-
+from config import JsonConfig
 
 SCRIPT_DIR = Path(__file__).parent
-JSON_PATH = SCRIPT_DIR / 'projects.json'
+# JSON_PATH = SCRIPT_DIR / 'projects.json'
+# BASE_DIR = '../..'
+config = JsonConfig().load()
 
-os.chdir(SCRIPT_DIR)
-BASE_DIR = '../..'
 
 if __name__ == '__main__':
+    os.chdir(SCRIPT_DIR)
+    
     args = options.parse()
     
     logmanager.setup_logging(caller_path=__file__)
@@ -26,7 +28,7 @@ if __name__ == '__main__':
         output.print_args(args, logger.info)
         exit()
     
-    for repo in repos.scan(BASE_DIR, has_remote=True):
+    for repo in repos.scan(config['BASE_DIR'], has_remote=True):
 
         if not filters.is_processable(repo.name, args.grep, args.exclude):
             logger.debug(f'filtering out {repo.name}')
