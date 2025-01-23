@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from pathlib import Path
 import os
 
@@ -8,12 +9,25 @@ import filters
 import options
 import output
 
+from autoconfig import AutoConfig
+@dataclass
+class Config(AutoConfig):
+    SCRIPT_DIR: str
+    JSON_FILENAME:str = 'projects.json'
+    JSON_PATH: str = None
+    BASE_DIR:str = '../..'
+    
+    def __post_init__(self):
+        if self.JSON_PATH is None:
+            self.JSON_PATH = self.SCRIPT_DIR / self.JSON_FILENAME
 
-SCRIPT_DIR = Path(__file__).parent
-JSON_PATH = SCRIPT_DIR / 'projects.json'
 
-os.chdir(SCRIPT_DIR)
-BASE_DIR = '../..'
+cfg = Config(Path(__file__).parent)
+
+# SCRIPT_DIR = Path(__file__).parent
+# JSON_PATH = SCRIPT_DIR / 'projects.json'
+
+os.chdir(cfg.SCRIPT_DIR)
 
 if __name__ == '__main__':
     args = options.parse()
@@ -26,7 +40,7 @@ if __name__ == '__main__':
         output.print_args(args, logger.info)
         exit()
     
-    for repo in repos.scan(BASE_DIR, has_remote=True):
+    for repo in repos.scan(cfg.BASE_DIR, has_remote=True):
 
         if not filters.is_processable(repo.name, args.grep, args.exclude):
             logger.debug(f'filtering out {repo.name}')
