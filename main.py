@@ -1,31 +1,34 @@
 import typer
-import sys
+import logging
 
-# sys.path.insert(0, 'python_argparse')
-# print(sys.path)
-# from python_argparse.main import main
+from proxy import (
+    simplegit,
+    filters,
+    options,
+    output,
+    config
+)
 
+logger = logging.getLogger(__name__)
 app = typer.Typer()
-subapp = typer.Typer(name='sub')
-app.add_typer(subapp)
+
 
 @app.callback(invoke_without_command=True)
-def callback(what:str='callback_what'):
-    print(f'callback {what = }')
+def init(ctx:typer.Context):
+    logging.basicConfig(
+        level=logging.DEBUG
+    )
+    
+    cfg = config.JsonConfig().load()
+    
+    ctx.ensure_object(dict)
+    ctx.obj['cfg'] = cfg
 
-@subapp.callback(invoke_without_command=True)
-def subcallback(what:str='subcallback_what'):
-    print(f'subcallback {what = }')
 
 @app.command()
-def main(name:str, capitalize:bool=False):
-    print(f'main {name = }, {capitalize = }')
+def main(ctx:typer.Context):
+    print(f'{ctx.obj = }')
 
-@subapp.command('main')
-def submain(name:str):
-    print(f'sub {name = }')
 
-# typer.run(
-    # main
-# )
-app()
+if __name__ == "__main__":
+    app()
